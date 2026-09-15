@@ -275,16 +275,13 @@ impl<'a> Model<'a> {
 
             match self.evaluate_node_in_context(arg, cell) {
                 CalcResult::Range { left, right } => {
-                    // TODO: We should do this for all functions that run through ranges
-                    // Running cargo test for the ironcalc takes around .8 seconds with this speedup
-                    // and ~ 3.5 seconds without it. Note that once properly in place sheet.dimension should be almost a noop
                     for sheet in left.sheet.min(right.sheet)..=left.sheet.max(right.sheet) {
                         let row1 = left.row.min(right.row);
                         let mut row2 = left.row.max(right.row);
                         let column1 = left.column.min(right.column);
                         let mut column2 = left.column.max(right.column);
-                        let dimension = match self.workbook.worksheet(sheet) {
-                            Ok(worksheet) => worksheet.dimension(),
+                        let worksheet = match self.workbook.worksheet(sheet) {
+                            Ok(worksheet) => worksheet,
                             Err(_) => {
                                 return CalcResult::new_error(
                                     Error::ERROR,
@@ -293,11 +290,19 @@ impl<'a> Model<'a> {
                                 )
                             }
                         };
-                        if row1 == 1 && row2 == LAST_ROW {
-                            row2 = dimension.max_row;
-                        }
-                        if column1 == 1 && column2 == LAST_COLUMN {
-                            column2 = dimension.max_column;
+                        // Whole-axis references need a used-range bound. Bounded ranges
+                        // already have one: scanning the entire worksheet for each SUM
+                        // turns a table of independent row totals into quadratic work.
+                        let whole_column = row1 == 1 && row2 == LAST_ROW;
+                        let whole_row = column1 == 1 && column2 == LAST_COLUMN;
+                        if whole_column || whole_row {
+                            let dimension = worksheet.dimension();
+                            if whole_column {
+                                row2 = dimension.max_row;
+                            }
+                            if whole_row {
+                                column2 = dimension.max_column;
+                            }
                         }
                         for row in row1..=row2 {
                             for column in column1..=column2 {

@@ -133,7 +133,7 @@ def finish(args, binary, cases, **extra):
               "concurrency": 1, "cases": cases, **extra}
     output = Path(args.output)
     output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    output.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n")
     print(f"Saved {output.name}; {len(cases)} cases passed", flush=True)
 
 
@@ -162,14 +162,29 @@ def csv_fixture(rows):
                      for r in range(1, rows + 1)) + "\n").encode()
 
 
-def check_cells(client, rows, delta=0):
-    for r in sorted({1, rows // 2 or 1, rows}):
-        for col, wanted in [(9, r + 35 + delta), (10, (r + 35 + delta) * 2)]:
-            cell = client.json(f"/api/cell?sheet=0&row={r}&col={col}")
-            assert cell["value"] == wanted, (r, col, cell, wanted)
-            assert cell["content"].startswith("=")
+def check_workbook(data, rows, delta=0):
+    """Verify every formula expression and cached result outside the timed region."""
+    with zipfile.ZipFile(io.BytesIO(data)) as z:
+        assert z.testzip() is None
+        ns = {"s": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"}
+        sheet = ET.fromstring(z.read("xl/worksheets/sheet1.xml"))
+        cells = {c.attrib["r"]: c for c in sheet.findall(".//s:c", ns)}
+        assert len(cells) == rows * 10
+        assert len(sheet.findall(".//s:f", ns)) == rows * 2
+        for row in range(1, rows + 1):
+            for column, expected, formula in [
+                ("I", row + 35 + delta, f"SUM(A{row}:H{row})"),
+                ("J", (row + 35 + delta) * 2, f"I{row}*2"),
+            ]:
+                cell = cells[f"{column}{row}"]
+                assert cell.findtext("s:f", namespaces=ns) == formula, (row, column)
+                assert float(cell.findtext("s:v", namespaces=ns)) == expected, (row, column)
     return {"rows": rows, "cells": rows * 10, "formulas": rows * 2,
-            "formula_sample_rows": sorted({1, rows // 2 or 1, rows}), "correct": True}
+            "all_formula_expressions_and_values_checked": True, "correct": True}
+
+
+def check_cells(client, rows, delta=0):
+    return check_workbook(client.request("/api/export")[0], rows, delta)
 
 
 def main():
@@ -188,14 +203,9 @@ def main():
             artifacts = []
             def check_xlsx(result, i):
                 data = result[0]
-                with zipfile.ZipFile(io.BytesIO(data)) as z:
-                    assert z.testzip() is None
-                    ns = {"s": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"}
-                    sheet = ET.fromstring(z.read("xl/worksheets/sheet1.xml"))
-                    assert len(sheet.findall(".//s:f", ns)) == rows * 2
-                    assert len(sheet.findall(".//s:c", ns)) == rows * 10
+                checked = check_workbook(data, rows)
                 artifacts.append(data)
-                return {"bytes": len(data), "sha256": digest(data), "all_cell_and_formula_counts_checked": True}
+                return {**checked, "bytes": len(data), "sha256": digest(data)}
             cases.append(measure("export_xlsx", rows, args,
                 lambda i: client.request("/api/export"), check_xlsx))
             cases.append(measure("import_xlsx_and_calculate", rows, args,
