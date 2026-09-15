@@ -1,0 +1,11 @@
+[package]
+name = "emf2svg"
+version.workspace = true
+edition.workspace = true
+license-file.workspace = true
+
+[dependencies]
+emf-core.workspace = true
+vector-ir.workspace = true
+glyph2path.workspace = true
+base64.workspace = true

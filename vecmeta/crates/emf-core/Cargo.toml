@@ -1,0 +1,8 @@
+[package]
+name = "emf-core"
+version.workspace = true
+edition.workspace = true
+license-file.workspace = true
+
+[dependencies]
+thiserror.workspace = true

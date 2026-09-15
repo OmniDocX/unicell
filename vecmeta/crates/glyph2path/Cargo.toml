@@ -1,0 +1,10 @@
+[package]
+name = "glyph2path"
+version.workspace = true
+edition.workspace = true
+license-file.workspace = true
+
+[dependencies]
+vector-ir.workspace = true
+fontdb.workspace = true
+ttf-parser.workspace = true

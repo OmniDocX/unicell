@@ -1,0 +1,22 @@
+[package]
+name = "emfsvg-cli"
+version.workspace = true
+edition.workspace = true
+license-file.workspace = true
+
+[[bin]]
+name = "emfsvg"
+path = "src/main.rs"
+
+[dependencies]
+emf-core.workspace = true
+emf2svg.workspace = true
+svg2emf.workspace = true
+vector-ir.workspace = true
+clap.workspace = true
+
+[dev-dependencies]
+emf-core.workspace = true
+emf2svg.workspace = true
+svg2emf.workspace = true
+vector-ir.workspace = true

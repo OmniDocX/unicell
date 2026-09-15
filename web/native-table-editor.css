@@ -1,0 +1,78 @@
+/* Excel-native table / AutoFilter / sort editor. */
+.nte-dialog {
+  position: fixed; inset: 50% auto auto 50%; z-index: 108; transform: translate(-50%, -50%);
+  display: flex; flex-direction: column; width: min(1180px, calc(100vw - 32px));
+  height: min(790px, calc(100vh - 42px)); overflow: hidden; color: #222; background: #fff;
+  border: 1px solid #929292; border-radius: 7px; box-shadow: 0 16px 48px rgba(0,0,0,.34);
+  font: var(--font);
+}
+.nte-dialog[hidden] { display: none; }
+.nte-dialog.busy .nte-main { opacity: .68; pointer-events: none; }
+.nte-title { display: flex; align-items: center; gap: 10px; min-height: 39px; padding: 0 12px; border-bottom: 1px solid #ddd; }
+.nte-title strong { white-space: nowrap; }
+.nte-subtitle { min-width: 0; overflow: hidden; color: #707070; text-overflow: ellipsis; white-space: nowrap; }
+.nte-title > button { margin-left: auto; border: 0; background: transparent; color: #666; cursor: pointer; font-size: 21px; }
+.nte-note { padding: 7px 12px; color: #354b5e; background: #f2f7fb; border-bottom: 1px solid #d7e2eb; font-size: 12px; }
+.nte-main { min-width: 0; min-height: 0; display: grid; grid-template-columns: 245px minmax(0,1fr); flex: 1; }
+.nte-sidebar { min-height: 0; display: flex; flex-direction: column; padding: 9px; background: #fafafa; border-right: 1px solid #ddd; }
+.nte-list { min-height: 0; flex: 1; overflow: auto; border: 1px solid #d5d5d5; background: #fff; }
+.nte-list h4 { position: sticky; top: 0; z-index: 1; margin: 0; padding: 6px 8px; color: #666; background: #f2f2f2; border-bottom: 1px solid #ddd; font-size: 11px; text-transform: uppercase; }
+.nte-list > button { display: flex; flex-direction: column; gap: 2px; width: 100%; padding: 8px 9px; border: 0; border-bottom: 1px solid #ececec; background: #fff; text-align: left; cursor: pointer; font: var(--font); }
+.nte-list > button:hover { background: #f4f8f6; }
+.nte-list > button.active { background: var(--accent-weak); box-shadow: inset 3px 0 var(--accent); }
+.nte-list > button span, .nte-list > button small { overflow: hidden; color: #666; text-overflow: ellipsis; white-space: nowrap; }
+.nte-list > button small { color: #8a8a8a; }
+.nte-empty-small { padding: 9px; color: #888; font-size: 12px; }
+.nte-side-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 8px; }
+.nte-side-actions button:last-child:nth-child(3) { grid-column: 1 / -1; }
+.nte-side-actions button, .nte-toolbar button, .nte-section > button, .nte-row-actions button,
+.nte-footer button, .nte-condition-row button, .nte-column-card header button, .nte-filter-card header button {
+  min-height: 28px; padding: 0 10px; border: 1px solid #bcbcbc; border-radius: 3px; background: #fff; cursor: pointer; font: var(--font);
+}
+.nte-side-actions button.primary, .nte-section > button.primary, .nte-footer button.primary { color: #fff; background: var(--accent); border-color: var(--accent); }
+.nte-side-actions button.danger, button.danger { color: #a4262c; }
+.nte-work { min-width: 0; min-height: 0; display: flex; flex-direction: column; }
+.nte-tabs { display: flex; gap: 2px; padding: 8px 10px 0; border-bottom: 1px solid #ddd; }
+.nte-tabs button { padding: 6px 12px; border: 0; border-bottom: 2px solid transparent; background: transparent; cursor: pointer; font: var(--font); }
+.nte-tabs button.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 700; }
+.nte-body { min-height: 0; flex: 1; overflow: auto; padding: 12px; }
+.nte-empty { padding: 60px 20px; color: #888; text-align: center; }
+.nte-section { margin: 0 0 13px; padding: 10px; border: 1px solid #d9d9d9; border-radius: 4px; }
+.nte-section > h3 { margin: 0 0 7px; font-size: 13px; }
+.nte-hint { margin: 3px 0 9px; color: #777; font-size: 12px; }
+.nte-warning { margin: 7px 0 0; padding: 5px 7px; color: #6e4d00; background: #fff7dc; border-left: 3px solid #e6b800; font-size: 12px; }
+.nte-grid { display: grid; grid-template-columns: repeat(3, minmax(150px,1fr)); gap: 8px 12px; }
+.nte-grid.two { grid-template-columns: repeat(2, minmax(200px,1fr)); }
+.nte-field { min-width: 0; display: flex; align-items: center; gap: 7px; }
+.nte-field > span { min-width: 90px; color: #555; font-size: 12px; }
+.nte-field > input, .nte-field > select, .nte-field > textarea,
+.nte-condition-row input, .nte-condition-row select {
+  min-width: 0; height: 28px; flex: 1; padding: 0 6px; border: 1px solid #c5c5c5; border-radius: 3px; background: #fff; font: var(--font);
+}
+.nte-field > textarea { min-height: 62px; padding: 5px 6px; resize: vertical; line-height: 1.35; }
+.nte-field > input.invalid { color: #a4262c; border-color: #d13438; background: #fff4f4; }
+.nte-check { display: flex; align-items: center; gap: 6px; min-height: 28px; color: #444; }
+.nte-check input { margin: 0; }
+.nte-toolbar { display: flex; align-items: center; gap: 7px; margin: 9px 0 0; }
+.nte-toolbar .nte-field { min-width: 300px; flex: 1; }
+.nte-column-list, .nte-filter-list, .nte-sort-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 9px; }
+.nte-column-card, .nte-filter-card { padding: 9px; border: 1px solid #ddd; border-radius: 4px; background: #fafafa; }
+.nte-column-card > header, .nte-filter-card > header { display: flex; align-items: center; min-height: 29px; margin: -3px 0 7px; }
+.nte-column-card > header button, .nte-filter-card > header button { margin-left: auto; }
+.nte-definition { display: grid; grid-template-columns: repeat(2, minmax(180px,1fr)); gap: 8px 12px; margin-top: 8px; padding-top: 8px; border-top: 1px dashed #d5d5d5; }
+.nte-definition > .nte-warning { grid-column: 1 / -1; }
+.nte-condition-row { display: grid; grid-template-columns: minmax(140px, .8fr) minmax(180px,1fr) auto; gap: 7px; align-items: center; }
+.nte-sort-row { display: grid; grid-template-columns: 65px repeat(3, minmax(135px,1fr)); gap: 7px; align-items: center; padding: 8px; border: 1px solid #ddd; background: #fafafa; }
+.nte-sort-row > .nte-field { grid-column: span 1; }
+.nte-sort-level { color: #666; font-weight: 700; font-size: 12px; }
+.nte-row-actions { grid-column: 1 / -1; display: flex; justify-content: flex-end; gap: 5px; }
+.nte-json { width: 100%; min-height: 360px; resize: vertical; padding: 8px; border: 1px solid #bbb; font: 12px/1.45 Consolas, monospace; }
+.nte-footer { display: flex; align-items: center; gap: 8px; min-height: 46px; padding: 7px 12px; border-top: 1px solid #ddd; }
+.nte-status { min-width: 0; flex: 1; overflow: hidden; color: #6c6c6c; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; }
+.nte-status.error { color: #a4262c; font-weight: 700; }
+@media (max-width: 880px) {
+  .nte-main { grid-template-columns: 190px minmax(0,1fr); }
+  .nte-grid, .nte-grid.two, .nte-definition { grid-template-columns: 1fr; }
+  .nte-sort-row { grid-template-columns: 55px minmax(130px,1fr); }
+  .nte-definition > .nte-warning { grid-column: auto; }
+}

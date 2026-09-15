@@ -1,0 +1,40 @@
+[package]
+name = "opencell-server"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+ironcalc = "0.8.2"
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.151"
+tiny_http = "0.12.0"
+reqwest = { version = "0.12", default-features = false, features = ["blocking", "json", "rustls-tls"] }
+# SVG ↔ EMF 互转（引用母项目 vecmeta 纯 Rust 库，本地 path 依赖）
+svg2emf = { path = "../vecmeta/crates/svg2emf" }
+emf2svg = { path = "../vecmeta/crates/emf2svg" }
+# udoc 容器的 Brotli 压缩与内容寻址散列（参考母项目 UDOC3）
+brotli = "7"
+sha2 = "0.10"
+sha1 = "0.10"
+base64 = "0.22"
+getrandom = "0.3"
+percent-encoding = "2"
+url = "2"
+# xlsx 嵌图：读写 xlsx(zip) 注入 drawing 图层
+zip = { version = "0.6", default-features = false }
+roxmltree = "0.21"
+svgtypes = "0.15.3"
+csv = "1.3"
+encoding_rs = "0.8"
+
+# 引擎重构：ironcalc_base 指向项目内 vendor 源码（修复数组参数 NIMPL、
+# 新增合并单元格 API 等），ironcalc 依赖自动改走本地分支
+[patch.crates-io]
+ironcalc_base = { path = "vendor/ironcalc_base" }
+
+# 降低 ironcalc 系列编译内存（opt-level=3 单 rustc 编译大 crate 峰值内存超出可用内存导致 OOM；
+# opt-level=1 编译内存减半，运行时仍比 debug 快 2-3 倍）
+[profile.release.package.ironcalc]
+opt-level = 1
+[profile.release.package.ironcalc_base]
+opt-level = 1

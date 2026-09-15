@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <script src="/workbook-session.js?v=20260908"></script>
+<meta charset="utf-8">
+<title>UniCell — 公益版电子表格</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0B8748">
+<link rel="icon" type="image/svg+xml" href="unicell-logo.svg?v=1">
+<link rel="stylesheet" href="theme.css?v=1-gm3">
+<link rel="stylesheet" href="icons.css?v=2-ai-launcher">
+<link rel="stylesheet" href="style.css?v=20260913-freeze">
+<link rel="stylesheet" href="native-data-tools.css?v=2-pivot-local-refresh">
+<link rel="stylesheet" href="query-connections-editor.css?v=1-query-connections">
+<link rel="stylesheet" href="native-table-editor.css?v=1-native-table">
+<link rel="stylesheet" href="native-drawing-editor.css?v=9-native-data">
+<link rel="stylesheet" href="page-review-editor.css?v=1-page-review">
+<link rel="stylesheet" href="selection-toolbar.css?v=20260908">
+<link rel="stylesheet" href="ui-kit.css?v=1-gm3">
+<link rel="stylesheet" href="ai-assistant.css?v=7-typed-ops">
+<link rel="stylesheet" href="vendor/katex/katex.min.css" media="print" onload="this.media='all'">
+<!-- 主题在样式生效前同步落盘到 <html>，避免深色用户看到一帧白闪 -->
+<script>try{var t=localStorage.getItem('unicell-theme');document.documentElement.dataset.theme=(t==='dark'||t==='light')?t:(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');}catch(e){}</script>
+<!-- Equation rendering is optional at startup.  Never let a slow/offline CDN block the workbook
+     shell, grid, or local self-tests from parsing. -->
+<script async src="vendor/katex/katex.min.js"></script>
+</head>
+<body>
+<div id="app">
+  <!-- Excel 式 Ribbon：选项卡 + 分组面板 -->
+  <div id="ribbon">
+    <div class="rb-tabs" role="tablist" aria-label="功能区选项卡">
+      <img class="rb-brand" src="unicell-logo.svg?v=1" width="28" height="28" alt="" aria-hidden="true" draggable="false">
+      <span class="rb-title" id="workbook-title" title="当前工作簿">UniCell</span>
+      <button type="button" class="rb-tab rb-tab-file" data-tab="file" role="tab" aria-selected="false">文件</button>
+      <button type="button" class="rb-tab active" data-tab="home" role="tab" aria-selected="true">开始</button>
+      <button type="button" class="rb-tab" data-tab="insert" role="tab" aria-selected="false">插入</button>
+      <button type="button" class="rb-tab" data-tab="formula" role="tab" aria-selected="false">公式</button>
+      <button type="button" class="rb-tab" data-tab="data" role="tab" aria-selected="false">数据</button>
+      <button type="button" class="rb-tab" data-tab="view" role="tab" aria-selected="false">视图</button>
+      <span class="rb-tabs-fill"></span>
+      <button type="button" id="btn-ai-assistant" class="rb-ai-launcher"
+              title="打开 U AI 工作簿助手" aria-label="打开 U AI 工作簿助手"
+              aria-haspopup="dialog" aria-controls="ai-assistant" aria-expanded="false">
+        <img class="rb-ai-logo" src="unicell-logo.svg?v=1" width="20" height="20" alt="" aria-hidden="true" draggable="false">
+        <span>U AI</span>
+      </button>
+      <button type="button" id="btn-command-palette" class="rb-omnibox" data-ic="search"
+              title="搜索命令与函数 (Ctrl+/)" aria-label="搜索命令与函数"><span>搜索命令</span></button>
+      <button type="button" id="btn-shortcuts" class="rb-util" data-ic="keyboard"
+              title="键盘快捷键 (Ctrl+Shift+/)" aria-label="键盘快捷键"></button>
+      <button type="button" id="btn-theme" class="rb-util" data-ic="dark"
+              title="切换深色 / 浅色主题" aria-label="切换深色或浅色主题" aria-pressed="false"></button>
+      <input type="file" id="file-input" accept=".xlsx,.xlsm,.udoc,.html,.csv" hidden>
+    </div>
+
+    <div class="rb-panels">
+      <!-- 文件（放在“开始”前，对齐母项目 unidoc 的文件选项卡） -->
+      <div class="rb-panel" data-tab="file">
+        <div class="rb-group">
+          <div class="rb-tools">
+            <button id="btn-file-new" class="rb-btn" title="新建空白工作簿"><span class="rb-ic" data-ic="file-new"></span><span class="rb-tx">新建</span></button>
+            <button id="btn-file-open" class="rb-btn" title="打开 Excel / CSV / udoc / 无损HTML（按扩展名自动识别）"><span class="rb-ic" data-ic="folder-open"></span><span class="rb-tx">打开</span></button>
+          </div>
+          <div class="rb-glabel">文件</div>
+        </div>
+        <div class="rb-group rb-file-lifecycle">
+          <div class="rb-tools">
+            <button id="btn-file-save" class="rb-btn" title="保存到当前文件 (Ctrl+S)"><span class="rb-ic" data-ic="save"></span><span class="rb-tx">保存</span></button>
+            <button id="btn-file-save-as" class="rb-btn" title="另存为 Excel、CSV、udoc 或无损 HTML (Ctrl+Shift+S)"><span class="rb-ic" data-ic="save-as"></span><span class="rb-tx">另存为</span></button>
+            <button id="btn-file-recent" class="rb-btn" title="打开最近文件"><span class="rb-ic" data-ic="history"></span><span class="rb-tx">最近</span></button>
+            <button id="btn-file-recover" class="rb-btn" title="恢复浏览器自动保存的工作簿" hidden><span class="rb-ic" data-ic="restore"></span><span class="rb-tx">恢复</span></button>
+          </div>
+          <div id="file-save-state" class="rb-glabel" aria-live="polite">已保存</div>
+        </div>
+        <div class="rb-group">
+          <div class="rb-tools">
+            <button id="btn-file-exp-xlsx" class="rb-btn" title="导出为 Excel (.xlsx)"><span class="rb-ic" data-ic="sheet"></span><span class="rb-tx">Excel</span></button>
+            <button id="btn-file-exp-csv" class="rb-btn" title="导出当前工作表为 CSV（UTF-8，仅保留显示值）"><span class="rb-ic" data-ic="table"></span><span class="rb-tx">CSV</span></button>
+            <button id="btn-file-exp-html" class="rb-btn" title="导出无损 HTML（矢量/动态/滑杆完整保留，可再导入）"><span class="rb-ic" data-ic="globe"></span><span class="rb-tx">无损HTML</span></button>
+            <button id="btn-file-exp-udoc" class="rb-btn" title="导出 udoc（unidoc_type:cell，可再导入）"><span class="rb-ic" data-ic="package"></span><span class="rb-tx">udoc</span></button>
+          </div>
+          <div class="rb-glabel">导出为</div>
+        </div>
+        <div class="rb-group">
+          <div class="rb-tools">
+            <button type="button" id="btn-file-print-pdf" class="rb-btn" title="按当前工作表真实行列区域调用浏览器原生打印 / 另存为 PDF"><span class="rb-ic" data-ic="print"></span><span class="rb-tx">打印/PDF</span></button>
+          </div>
+          <div class="rb-glabel">打印</div>
+        </div>
+        <div class="rb-group">
+          <div class="rb-tools rb-print-settings">
+            <select id="print-scope" aria-label="打印范围" title="打印当前工作表或整个工作簿">
+              <option value="sheet">当前工作表</option>
+              <option value="workbook">整个工作簿</option>
+            </select>
+            <select id="print-paper-size" aria-label="打印纸张大小" title="打印纸张大小">
+              <option value="actual">实际区域</option>
+              <option value="sheet">工作表页面设置</option>
+              <option value="a3">A3</option>
+              <option value="a4">A4</option>
+              <option value="a5">A5</option>
+              <option value="letter">Letter</option>
+              <option value="legal">Legal</option>
+            </select>
+            <select id="print-orientation" aria-label="打印方向" title="打印方向">
+              <option value="sheet">跟随工作表</option>
+              <option value="portrait">纵向</option>
+              <option value="landscape">横向</option>
+            </select>
+            <select id="print-scaling" aria-label="打印缩放" title="与 Excel 打印设置一致的缩放方式">
+              <option value="sheet">跟随工作表</option>
+              <option value="none">无缩放</option>
+              <option value="fit-width">所有列调整为一页</option>
+              <option value="fit-height">所有行调整为一页</option>
+              <option value="fit-sheet">工作表调整为一页</option>
+            </select>
+          </div>
+          <div class="rb-glabel">页面</div>
+        </div>
+      </div>
+      <!-- 开始 -->
+      <div class="rb-panel active" data-tab="home">
+        <div class="rb-group">
+          <div class="rb-tools">
+            <div class="paste-ribbon-control">
+              <button id="btn-paste" class="rb-btn" title="粘贴 (Ctrl+V)"><span class="rb-ic" data-ic="paste"></span><span class="rb-tx">粘贴</span></button>
+              <button type="button" id="btn-paste-options" class="paste-options-trigger" title="选择性粘贴 (Ctrl+Alt+V)" aria-label="选择性粘贴">▾</button>
+            </div>
+            <button id="btn-cut" class="rb-ico" data-ic="cut" title="剪切 (Ctrl+X)" aria-label="剪切"></button>
+            <button id="btn-copy" class="rb-ico" data-ic="copy" title="复制 (Ctrl+C)" aria-label="复制"></button>
+            <button id="btn-painter" class="rb-ico" data-ic="painter" title="格式刷：先选样式源，再选目标（Esc 取消）" aria-label="格式刷"></button>
+            <span class="rb-vsep"></span>
+            <button id="btn-undo" class="rb-ico" data-ic="undo" title="撤销 (Ctrl+Z)" aria-label="撤销"></button>
+            <button id="btn-redo" class="rb-ico" data-ic="redo" title="重做 (Ctrl+Y)" aria-label="重做"></button>
+          </div>
+          <div class="rb-glabel">剪贴板</div>
+        </div>
+        <div class="rb-group">
+          <div class="rb-tools">
+            <div class="rb-col">
+              <select id="sel-fontfamily" class="rb-sel rb-fontname" title="字体（同母项目 UniDoc 字体清单）">
+                <option value="">字体</option>
+                <optgroup label="中文字体">
+                  <option value="等线">等线</option><option value="宋体">宋体</option>
+                  <option value="新宋体">新宋体</option><option value="黑体">黑体</option>
+                  <option value="微软雅黑">微软雅黑</option><option value="楷体">楷体</option>
+                  <option value="仿宋">仿宋</option><option value="隶书">隶书</option>
+                  <option value="幼圆">幼圆</option><option value="华文宋体">华文宋体</option>
+                  <option value="华文中宋">华文中宋</option><option value="华文仿宋">华文仿宋</option>
+                  <option value="华文楷体">华文楷体</option><option value="华文细黑">华文细黑</option>
+                  <option value="华文黑体">华文黑体</option><option value="华文琥珀">华文琥珀</option>
+                  <option value="华文新魏">华文新魏</option><option value="华文行楷">华文行楷</option>
+                  <option value="华文隶书">华文隶书</option><option value="华文彩云">华文彩云</option>
+                  <option value="方正舒体">方正舒体</option><option value="方正姚体">方正姚体</option>
+                </optgroup>
+                <optgroup label="西文字体">
+                  <option value="Inter">Inter（默认）</option><option value="Arial">Arial</option>
+                  <option value="Arial Black">Arial Black</option><option value="Arial Narrow">Arial Narrow</option>
+                  <option value="Bahnschrift">Bahnschrift</option><option value="Book Antiqua">Book Antiqua</option>
+                  <option value="Bookman Old Style">Bookman Old Style</option><option value="Calibri">Calibri</option>
+                  <option value="Calibri Light">Calibri Light</option><option value="Cambria">Cambria</option>
+                  <option value="Candara">Candara</option><option value="Century Gothic">Century Gothic</option>
+                  <option value="Comic Sans MS">Comic Sans MS</option><option value="Consolas">Consolas</option>
+                  <option value="Constantia">Constantia</option><option value="Corbel">Corbel</option>
+                  <option value="Courier New">Courier New</option><option value="Franklin Gothic Medium">Franklin Gothic</option>
+                  <option value="Garamond">Garamond</option><option value="Georgia">Georgia</option>
+                  <option value="Impact">Impact</option><option value="Ink Free">Ink Free</option>
+                  <option value="Lucida Console">Lucida Console</option><option value="Lucida Sans Unicode">Lucida Sans Unicode</option>
+                  <option value="Palatino Linotype">Palatino Linotype</option><option value="Segoe Print">Segoe Print</option>
+                  <option value="Segoe Script">Segoe Script</option><option value="Segoe UI">Segoe UI</option>
+                  <option value="Segoe UI Light">Segoe UI Light</option><option value="Sitka Text">Sitka Text</option>
+                  <option value="Sylfaen">Sylfaen</option><option value="Tahoma">Tahoma</option>
+                  <option value="Times New Roman">Times New Roman</option><option value="Trebuchet MS">Trebuchet MS</option>
+                  <option value="Verdana">Verdana</option>
+                </optgroup>
+                <optgroup label="日韩字体">
+                  <option value="Yu Gothic">Yu Gothic</option><option value="Meiryo">Meiryo</option>
+                  <option value="MS Gothic">MS Gothic</option><option value="Malgun Gothic">Malgun Gothic</option>
+                </optgroup>
+              </select>
+              <div class="rb-row">
+                <select id="sel-fontsize" class="rb-sel rb-fontsize" title="字号">
+                  <option>8</option><option>9</option><option>10</option><option>11</option>
+                  <option selected>12</option><option>14</option><option>16</option><option>18</option>
+                  <option>20</option><option>24</option><option>28</option><option>36</option><option>48</option>
+                </select>
+                <button id="btn-bold" class="rb-ico" data-ic="bold" title="加粗 (Ctrl+B)" aria-label="加粗" aria-pressed="false"></button>
+                <button id="btn-italic" class="rb-ico" data-ic="italic" title="倾斜 (Ctrl+I)" aria-label="倾斜" aria-pressed="false"></button>
+                <button id="btn-underline" class="rb-ico" data-ic="underline" title="下划线 (Ctrl+U)" aria-label="下划线" aria-pressed="false"></button>
+                <button id="btn-strike" class="rb-ico" data-ic="strike" title="删除线" aria-label="删除线" aria-pressed="false"></button>
+                <span class="color-btn" id="font-color-btn" role="button" tabindex="0" title="字体颜色" aria-label="字体颜色"><i class="cb-ic" data-ic="text-color"></i><i class="cb-bar" style="background:#c00000"></i><input type="color" id="font-color" value="#c00000" hidden></span>
+                <span class="color-btn" id="bg-color-btn" role="button" tabindex="0" title="填充颜色" aria-label="填充颜色"><i class="cb-ic" data-ic="fill-color"></i><i class="cb-bar" style="background:#ffff00"></i><input type="color" id="bg-color" value="#ffff00" hidden></span>
+                <div class="dropdown-wrap">
+                  <button id="btn-border" class="rb-ico rb-ico-split" data-ic="borders" title="边框" aria-label="边框" aria-haspopup="true" aria-expanded="false"><span class="rb-caret"></span></button>
+                  <div id="border-menu" hidden>
+                    <div class="bm-item" data-btype="all">⊞ 所有框线</div>
+                    <div class="bm-item" data-btype="outer">□ 外侧框线</div>
+                    <div class="bm-item" data-btype="inner">┼ 内部框线</div>
+                    <div class="bm-item" data-btype="top">▔ 上框线</div>
+                    <div class="bm-item" data-btype="bottom">▁ 下框线</div>
+                    <div class="bm-item" data-btype="left">▏ 左框线</div>
+                    <div class="bm-item" data-btype="right">▕ 右框线</div>
+                    <div class="bm-sep"></div>
+                    <div class="bm-item" data-btype="outer" data-bstyle="thick">▣ 粗外侧框线</div>
+                    <div class="bm-item" data-btype="bottom" data-bstyle="double">═ 双底框线</div>
+                    <div class="bm-sep"></div>
+                    <div class="bm-item" data-btype="none">✕ 无框线</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="rb-glabel">字体</div>
+        </div>
+        <div class="rb-group">
+          <div class="rb-tools">
+            <div class="rb-col">
+              <div class="rb-row">
+                <button id="btn-align-left" class="rb-ico" data-ic="align-left" title="左对齐" aria-label="左对齐" aria-pressed="false"></button>
+                <button id="btn-align-center" class="rb-ico" data-ic="align-center" title="居中" aria-label="居中" aria-pressed="false"></button>
+                <button id="btn-align-right" class="rb-ico" data-ic="align-right" title="右对齐" aria-label="右对齐" aria-pressed="false"></button>
+                <button id="btn-wrap" class="rb-ico" data-ic="wrap" title="自动换行" aria-label="自动换行" aria-pressed="false"></button>
+              </div>
+              <div class="rb-row">
+                <button id="btn-valign-top" class="rb-ico" data-ic="valign-top" title="顶端对齐" aria-label="顶端对齐" aria-pressed="false"></button>
+                <button id="btn-valign-middle" class="rb-ico" data-ic="valign-mid" title="垂直居中" aria-label="垂直居中" aria-pressed="false"></button>
+                <button id="btn-valign-bottom" class="rb-ico" data-ic="valign-bot" title="底端对齐" aria-label="底端对齐" aria-pressed="false"></button>
+                <button id="btn-merge" class="rb-ico" data-ic="merge" title="合并单元格/取消合并（保留左上角内容）" aria-label="合并单元格"></button>
+              </div>
+            </div>
+          </div>
+          <div class="rb-glabel">对齐方式</div>
+        </div>
+        <div class="rb-group">
+          <div class="rb-tools">
+            <select id="sel-numfmt" class="rb-sel rb-numfmt" title="数字格式">
+              <option value="general">常规</option>
+              <option value="#,##0.00">数值 1,234.56</option>
+              <option value="#,##0">整数 1,235</option>
+              <option value="$#,##0.00">货币 $1,234.56</option>
+              <option value="¥#,##0.00">货币 ¥1,234.56</option>
+              <option value="0.00%">百分比 12.34%</option>
+              <option value="0%">百分比 12%</option>
+              <option value="0.00E+00">科学计数</option>
+              <option value="yyyy-mm-dd">日期 2026-07-31</option>
+              <option value="yyyy-mm-dd hh:mm">日期时间</option>
+              <option value="hh:mm:ss">时间</option>
+              <option value="@">文本</option>
+            </select>
+            <button id="btn-dec-more" class="rb-ico rb-ico-dec" title="增加小数位" aria-label="增加小数位">.0<sup>+</sup></button>
+            <button id="btn-dec-less" class="rb-ico rb-ico-dec" title="减少小数位" aria-label="减少小数位">.0<sup>−</sup></button>
+          </div>
+          <div class="rb-glabel">数字</div>
+        </div>
+        <div class="rb-group">
+          <div class="rb-tools">
+            <button id="btn-cf" class="rb-btn" title="条件格式：按规则自动着色"><span class="rb-ic" data-ic="cond-format"></span><span class="rb-tx">条件格式</span></button>
+            <button id="btn-dv" class="rb-btn" title="数据验证：列表、数值、日期、时间及自定义公式"><span class="rb-ic" data-ic="validate"></span><span class="rb-tx">数据验证</span></button>
+            <button id="btn-clearfmt" class="rb-ico" data-ic="clear-format" title="清除格式" aria-label="清除格式"></button>
+          </div>
+          <div class="rb-glabel">样式</div>
+        </div>
+      </div>
+
+      <!-- 插入 -->
+      <div class="rb-panel" data-tab="insert">
+        <div class="rb-group">
+          <div class="rb-tools">
+            <button id="btn-ins-textbox" class="rb-btn" title="插入文本框（可拖拽/编辑）"><span class="rb-ic" data-ic="textbox"></span><span class="rb-tx">文本框</span></button>
+            <button id="btn-ins-image" class="rb-btn" title="插入图片"><span class="rb-ic" data-ic="image"></span><span class="rb-tx">图片</span></button>
+            <button id="btn-ins-svg" class="rb-btn" title="插入 SVG 矢量图"><span class="rb-ic" data-ic="vector"></span><span class="rb-tx">SVG</span></button>
+            <button id="btn-ins-video" class="rb-btn" title="插入视频"><span class="rb-ic" data-ic="video"></span><span class="rb-tx">视频</span></button>
+            <button id="btn-ins-html" class="rb-btn" title="插入沙盒 HTML（可运行脚本）"><span class="rb-ic" data-ic="code"></span><span class="rb-tx">沙盒HTML</span></button>
+            <input type="file" id="ins-image-input" accept="image/*,.svg,.webp,.gif,.apng" hidden>
+            <input type="file" id="ins-video-input" accept="video/*" hidden>
+          </div>
+          <div class="rb-glabel">对象</div>
+        </div>
+        <div class="rb-group">
+          <div class="rb-tools">
+            <button id="btn-ins-cell" class="rb-ico rb-ico-text" data-ic="anchor" title="所选对象锚定到当前单元格">锚定到单元格</button>
+            <button id="btn-ins-abs" class="rb-ico rb-ico-text" data-ic="float" title="所选对象改为绝对位置浮动">绝对位置浮动</button>
+            <button id="btn-ins-del" class="rb-ico rb-ico-text" data-ic="trash" title="删除所选对象">删除对象</button>
+          </div>
+          <div class="rb-glabel">摆放</div>
+        </div>
+        <div class="rb-group">
+          <div class="rb-tools">
+            <button id="btn-ins-latex" class="rb-btn" title="在当前单元格插入 LaTeX 公式"><span class="rb-ic" data-ic="formula"></span><span class="rb-tx">公式</span></button>
+            <button id="btn-ins-link" class="rb-btn" title="插入超链接"><span class="rb-ic" data-ic="link"></span><span class="rb-tx">链接</span></button>
+          </div>
+          <div class="rb-glabel">符号</div>
+        </div>
+      </div>
+
+      <!-- 公式 -->
+      <div class="rb-panel" data-tab="formula">
+        <div class="rb-group">
+          <div class="rb-tools">
+            <button id="fr-fx" class="rb-btn" title="插入函数"><span class="rb-ic" data-ic="fx"></span><span class="rb-tx">插入函数</span></button>
+            <button id="fr-autosum" class="rb-btn" title="自动求和 (Alt+=)"><span class="rb-ic" data-ic="sigma"></span><span class="rb-tx">自动求和</span></button>
+            <select id="fr-lib" class="rb-sel" title="函数库">
+              <option value="">函数库 ▾</option>
+              <option>常用</option><option>财务</option><option>逻辑</option><option>文本</option>
+              <option>日期时间</option><option>查找引用</option><option>数学三角</option><option>统计</option>
+            </select>
+          </div>
+          <div class="rb-glabel">函数库</div>
+        </div>
+        <div class="rb-group">
+          <div class="rb-tools">
+            <button id="fr-names" class="rb-btn" title="名称管理器"><span class="rb-ic" data-ic="tag"></span><span class="rb-tx">名称管理器</span></button>
+          </div>
+          <div class="rb-glabel">定义的名称</div>
+        </div>
+        <div class="rb-group">
+          <div class="rb-tools">
+            <button id="fr-trace-prec" class="rb-ico" title="追踪引用单元格">追踪引用</button>
+            <button id="fr-trace-dep" class="rb-ico" title="追踪从属单元格">追踪从属</button>
+            <button id="fr-trace-clear" class="rb-ico" title="删除箭头">删除箭头</button>
+            <button id="fr-showformulas" class="rb-ico" title="显示公式而非计算结果">显示公式</button>
+          </div>
+          <div class="rb-glabel">公式审核</div>
+        </div>
+        <div class="rb-group">
+          <div class="rb-tools">
+            <select id="fr-calcmode" class="rb-sel" title="计算选项">
+              <option value="auto">自动计算</option>
+              <option value="manual">手动计算</option>
+            </select>
+            <button id="fr-calc" class="rb-btn" title="开始计算 (F9)"><span class="rb-ic" data-ic="play"></span><span class="rb-tx">开始计算</span></button>
+            <button id="fr-iteration" class="rb-ico" title="设置循环引用的迭代次数与收敛精度">迭代计算设置</button>
+          </div>
+          <div class="rb-glabel">计算</div>
+        </div>
+      </div>
+
+      <!-- 数据 -->
+      <div class="rb-panel" data-tab="data">
+        <div class="rb-group">
+          <div class="rb-tools">
+            <button id="btn-tables" class="rb-btn" title="创建、缩放和编辑 Excel 表，以及普通区域自动筛选和多条件排序"><span class="rb-ic" data-ic="table"></span><span class="rb-tx">表与筛选</span></button>
+          </div>
+          <div class="rb-glabel">排序和筛选</div>
+        </div>
+        <div class="rb-group">
+          <div class="rb-tools">
+            <button id="btn-data-dv" class="rb-btn" title="管理当前工作表的数据验证规则"><span class="rb-ic" data-ic="validate"></span><span class="rb-tx">数据验证</span></button>
+            <button id="btn-what-if" class="rb-btn" title="目标求解、单变量/双变量数据表和方案管理器"><span class="rb-ic" data-ic="analytics"></span><span class="rb-tx">假设分析</span></button>
+          </div>
+          <div class="rb-glabel">数据工具</div>
+        </div>
+        <div class="rb-group">
+          <div class="rb-tools">
+            <button id="btn-query-connections" class="rb-btn" title="查看并编辑 Excel 原生连接、查询表、外部链接与数据模型；运行安全 Power Query M 子集"><span class="rb-ic" data-ic="database"></span><span class="rb-tx">查询与连接</span></button>
+          </div>
+          <div class="rb-glabel">获取和转换数据</div>
+        </div>
+        <div class="rb-group">
+          <div class="rb-tools">
+            <button id="btn-pivot-tables" class="rb-btn" title="编辑 Excel 原生透视表字段、行列筛选和值布局"><span class="rb-ic" data-ic="pivot"></span><span class="rb-tx">数据透视表</span></button>
+            <button id="btn-pivot-caches" class="rb-btn" title="查看原生透视缓存并设置 Excel 打开时刷新"><span class="rb-ic" data-ic="refresh"></span><span class="rb-tx">缓存刷新</span></button>
+          </div>
+          <div class="rb-glabel">透视表</div>
+        </div>
+        <div class="rb-group">
+          <div class="rb-tools">
+            <button id="btn-slicers" class="rb-btn" title="编辑 Excel 原生切片器选择、样式和透视表连接"><span class="rb-ic" data-ic="filter"></span><span class="rb-tx">切片器</span></button>
+            <button id="btn-timelines" class="rb-btn" title="编辑 Excel 原生时间线区间、粒度、显示和透视表连接"><span class="rb-ic" data-ic="timeline"></span><span class="rb-tx">时间线</span></button>
+          </div>
+          <div class="rb-glabel">筛选器</div>
+        </div>
+      </div>
+
+      <!-- 视图 -->
+      <div class="rb-panel" data-tab="view">
+        <div class="rb-group">
+          <div class="rb-tools">
+            <button id="btn-page-review" class="rb-btn" title="编辑 Excel 原生纸张、页边距、打印区域、分页符、批注和保护"><span class="rb-ic" data-ic="page"></span><span class="rb-tx">页面/审阅</span></button>
+          </div>
+          <div class="rb-glabel">页面布局、审阅与共享</div>
+        </div>
+        <div class="rb-group">
+          <div class="rb-tools">
+            <button id="btn-freeze" class="rb-btn" title="以当前单元格冻结窗格"><span class="rb-ic" data-ic="freeze"></span><span class="rb-tx">冻结窗格</span></button>
+            <button id="btn-unfreeze" class="rb-ico rb-ico-text" title="取消冻结">解冻</button>
+          </div>
+          <div class="rb-glabel">窗口</div>
+        </div>
+        <div class="rb-group">
+          <div class="rb-tools">
+            <button id="btn-toggle-gridlines" class="rb-ico rb-ico-text on" title="显示/隐藏网格线" aria-pressed="true">网格线</button>
+            <button id="btn-toggle-formulabar" class="rb-ico rb-ico-text on" title="显示/隐藏公式栏" aria-pressed="true">公式栏</button>
+          </div>
+          <div class="rb-glabel">显示</div>
+        </div>
+        <div class="rb-group">
+          <div class="rb-tools">
+            <button id="btn-zoom-out" class="rb-ico" data-ic="zoom-out" title="缩小" aria-label="缩小"></button>
+            <span id="zoom-level" title="缩放比例">100%</span>
+            <button id="btn-zoom-in" class="rb-ico" data-ic="zoom-in" title="放大" aria-label="放大"></button>
+            <button id="btn-zoom-reset" class="rb-ico rb-ico-text" title="重置为 100%">100%</button>
+          </div>
+          <div class="rb-glabel">缩放</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 名称框 + 公式栏 -->
+  <div id="formula-row">
+    <div class="formula-name-wrap">
+      <input id="name-box" title="名称框：输入 A1 跳转" spellcheck="false" aria-label="名称框">
+      <button type="button" id="name-box-drop" title="选择名称框" aria-label="展开名称框">▾</button>
+    </div>
+    <span id="formula-grip" aria-hidden="true">⋮</span>
+    <div id="formula-edit-controls">
+      <button type="button" id="formula-cancel" title="取消输入 (Esc)" aria-label="取消输入">×</button>
+      <button type="button" id="formula-accept" title="确认输入 (Enter)" aria-label="确认输入">✓</button>
+      <span id="fx-label" title="插入函数">fx</span>
+    </div>
+    <div id="formula-input-wrap">
+      <textarea id="formula-input" rows="1" spellcheck="false" placeholder="" aria-label="公式栏"></textarea>
+      <div id="rich-formula-input" class="rich-formula-input" contenteditable="false"
+           role="textbox" aria-multiline="true" aria-label="富文本公式栏" spellcheck="false"></div>
+      <button type="button" id="formula-expand" title="展开公式栏" aria-label="展开公式栏" aria-expanded="false">⌄</button>
+    </div>
+  </div>
+
+  <!-- 网格区 -->
+  <div id="grid-wrap">
+    <div id="corner-box"></div>
+    <div id="col-headers"><div id="col-headers-inner"></div></div>
+    <div id="row-headers"><div id="row-headers-inner"></div></div>
+    <div id="grid-scroll">
+      <div id="grid-spacer"></div>
+      <div id="grid-lines"></div>
+      <div id="cells-layer"></div>
+      <div id="selection-layer">
+        <div id="sel-range"></div>
+        <div id="sel-cursor"></div>
+        <div id="fill-handle"></div>
+        <div id="fill-preview"></div>
+      </div>
+      <div id="objects-layer"></div>
+      <input id="cell-editor" spellcheck="false" autocomplete="off">
+    </div>
+    <div id="frozen-objects-viewport"><div id="frozen-objects-layer"></div></div>
+  </div>
+
+  <!-- Sheet 标签栏 -->
+  <div id="sheetbar">
+    <button id="btn-addsheet" data-ic="plus" title="新建工作表" aria-label="新建工作表"></button>
+    <div id="sheet-tabs" role="tablist" aria-label="工作表"></div>
+  </div>
+
+  <!-- 状态栏（Excel 同款：信息 + 有效数据行列数 + 统计 + 视图切换 + 缩放滑块） -->
+  <div id="statusbar">
+    <span id="status-msg">就绪</span>
+    <span id="status-dim" title="当前表有效数据区域"></span>
+    <span class="tb-spacer"></span>
+    <span id="status-stats"></span>
+    <div class="st-views">
+      <button id="st-view-normal" class="on" title="普通视图">普通</button>
+      <button id="st-view-pages" title="分页预览（A4 分页线）">分页</button>
+      <button id="st-view-formulas" title="显示公式">显示公式</button>
+    </div>
+    <button id="btn-view-udoc" class="st-udoc" title="查看 udoc 文档结构（参考母项目 unidoc）">查看.udoc</button>
+    <div class="st-zoom">
+      <button id="st-zoom-out" data-ic="minus" title="缩小" aria-label="缩小"></button>
+      <input type="range" id="st-zoom-slider" min="50" max="400" value="100" title="缩放滑块" aria-label="缩放比例">
+      <button id="st-zoom-in" data-ic="plus" title="放大" aria-label="放大"></button>
+      <button id="st-zoom-level" title="点击重置 100%">100%</button>
+    </div>
+  </div>
+
+  <!-- 公式函数自动补全下拉 -->
+  <div id="fn-hint" hidden></div>
+
+  <!-- 右键菜单 -->
+  <div id="ctx-menu" hidden></div>
+  <div id="paste-special-dialog" class="paste-special-dialog" hidden role="dialog" aria-modal="true" aria-labelledby="paste-special-title">
+    <div class="paste-special-card">
+      <div class="paste-special-titlebar">
+        <strong id="paste-special-title">选择性粘贴</strong>
+        <button type="button" id="paste-special-close" aria-label="关闭">×</button>
+      </div>
+      <p class="paste-special-hint">选择要保留的内容；“转置”会交换源区域的行与列。</p>
+      <div class="paste-special-groups">
+        <section>
+          <h3>粘贴</h3>
+          <div class="paste-special-grid">
+            <button type="button" data-paste-special="all"><span>▦</span>全部</button>
+            <button type="button" data-paste-special="values"><span>123</span>值</button>
+            <button type="button" data-paste-special="formulas"><span>fx</span>公式</button>
+            <button type="button" data-paste-special="formats"><span>🎨</span>格式</button>
+          </div>
+        </section>
+        <section>
+          <h3>转置粘贴</h3>
+          <div class="paste-special-grid">
+            <button type="button" data-paste-special="transpose-all"><span>⇄</span>全部</button>
+            <button type="button" data-paste-special="transpose-values"><span>⇄</span>值</button>
+            <button type="button" data-paste-special="transpose-formulas"><span>⇄</span>公式</button>
+            <button type="button" data-paste-special="transpose-formats"><span>⇄</span>格式</button>
+          </div>
+        </section>
+      </div>
+      <div class="paste-special-actions"><button type="button" id="paste-special-cancel">取消</button></div>
+    </div>
+  </div>
+  <div id="paste-options-flyout" class="paste-options-flyout" hidden>
+    <button type="button" id="paste-options-flyout-open" title="粘贴选项">📋<span>▾</span></button>
+  </div>
+  <div id="recent-files-menu" class="recent-files-menu" hidden role="menu" aria-label="最近文件">
+    <div class="recent-files-title">最近文件</div>
+    <div id="recent-files-list" class="recent-files-list"></div>
+    <button type="button" id="btn-clear-recent" class="recent-files-clear">清除列表</button>
+  </div>
+
+  <!-- 命令面板：搜索并执行功能区全部命令与工作表函数 -->
+  <div id="cmdk" class="cmdk" hidden role="dialog" aria-modal="true" aria-labelledby="cmdk-input">
+    <div class="cmdk-card" role="none">
+      <div class="cmdk-field">
+        <span class="cmdk-ic" data-ic="search" aria-hidden="true"></span>
+        <input id="cmdk-input" type="text" spellcheck="false" autocomplete="off"
+               placeholder="搜索命令、函数或工作表…" aria-label="搜索命令、函数或工作表"
+               role="combobox" aria-expanded="true" aria-controls="cmdk-list" aria-autocomplete="list">
+        <kbd class="cmdk-esc">Esc</kbd>
+      </div>
+      <div id="cmdk-list" class="cmdk-list" role="listbox" aria-label="搜索结果"></div>
+      <div class="cmdk-foot">
+        <span><kbd>↑</kbd><kbd>↓</kbd> 选择</span>
+        <span><kbd>Enter</kbd> 执行</span>
+        <span><kbd>Ctrl</kbd>+<kbd>/</kbd> 打开</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 快捷键总览 -->
+  <div id="shortcuts-dialog" class="uk-dialog" hidden role="dialog" aria-modal="true" aria-labelledby="shortcuts-title">
+    <div class="uk-dialog-card uk-dialog-wide">
+      <div class="uk-dialog-head">
+        <h2 id="shortcuts-title">键盘快捷键</h2>
+        <button type="button" class="uk-icon-btn" data-ic="close" data-uk-close aria-label="关闭"></button>
+      </div>
+      <div id="shortcuts-body" class="uk-dialog-body shortcuts-body"></div>
+    </div>
+  </div>
+
+  <!-- Toast 通知区 -->
+  <div id="uk-toasts" class="uk-toasts" role="status" aria-live="polite" aria-atomic="false"></div>
+
+  <!-- U AI：只通过受控 JSON API 读取和修改工作簿，不接触 OOXML。入口位于右上角，也可从 Ctrl+/ 进入。 -->
+  <aside id="ai-assistant" class="ai-assistant" hidden role="dialog" aria-modal="false" aria-labelledby="ai-title">
+    <div id="ai-resizer" class="ai-resizer" role="separator" aria-orientation="vertical"
+         aria-label="拖动调整 U AI 面板宽度" tabindex="0" title="向左拖动可放宽面板"></div>
+    <header class="ai-head">
+      <img class="ai-logo" src="unicell-logo.svg?v=1" width="36" height="36" alt="" aria-hidden="true" draggable="false">
+      <div class="ai-title-block">
+        <div class="ai-title-line">
+          <h2 id="ai-title">U AI</h2>
+          <span id="ai-provider-status" class="ai-local-badge" title="模型地址和密钥只保存在服务端">正在连接…</span>
+        </div>
+        <p>直接说出你想完成的工作</p>
+      </div>
+      <button type="button" id="ai-fullscreen" class="ai-icon-button ai-fullscreen-button"
+              title="全屏使用 U AI" aria-label="全屏使用 U AI" aria-pressed="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
+        <span>全屏</span>
+      </button>
+      <button type="button" id="ai-close" class="ai-icon-button" title="关闭" aria-label="关闭 U AI">×</button>
+    </header>
+    <div class="ai-body">
+      <div id="ai-thread" class="ai-thread" aria-live="polite">
+        <div class="ai-welcome">
+          <strong>你好，我能帮你处理这张表</strong>
+          <span>不用懂公式或 JSON，用一句话描述目标即可。</span>
+        </div>
+      </div>
+
+      <section id="ai-preview-card" class="ai-card" hidden aria-labelledby="ai-preview-title">
+        <div class="ai-card-head">
+          <div>
+            <h3 id="ai-preview-title">确认修改</h3>
+            <p>先看变化，确认后才会写入；整次修改可一步撤销。</p>
+          </div>
+          <span id="ai-preview-count" class="ai-count"></span>
+        </div>
+        <div id="ai-diff" class="ai-diff"></div>
+        <div id="ai-feedback" class="ai-feedback" hidden></div>
+        <div class="ai-primary-actions ai-confirm-actions">
+          <button type="button" id="ai-reject" class="ai-secondary" disabled>取消</button>
+          <button type="button" id="ai-accept" class="ai-primary" disabled>确认写入</button>
+        </div>
+      </section>
+
+      <div id="ai-internal-tools" hidden aria-hidden="true">
+        <div class="ai-internal-body">
+          <section class="ai-card" aria-labelledby="ai-context-title">
+            <div class="ai-card-head">
+              <div>
+                <h3 id="ai-context-title">工作簿上下文</h3>
+                <p>U AI 会自动读取；只有排查问题时才需要手动操作。</p>
+              </div>
+              <button type="button" id="ai-refresh-context" class="ai-link-button">刷新摘要</button>
+            </div>
+            <div id="ai-context-summary" class="ai-context-summary">尚未读取</div>
+            <div class="ai-inline-actions">
+              <code id="ai-selection-ref">A1</code>
+              <button type="button" id="ai-read-selection">读取当前选区</button>
+              <button type="button" id="ai-read-detail">读取活动单元格</button>
+            </div>
+            <pre id="ai-context-detail" class="ai-context-detail" hidden></pre>
+            <div class="ai-inline-actions">
+              <button type="button" id="ai-copy-request" class="ai-secondary" title="调试或离线使用">复制 AI 请求详情</button>
+            </div>
+            <pre id="ai-request-preview" class="ai-context-detail" hidden></pre>
+          </section>
+
+          <section class="ai-card" aria-labelledby="ai-ops-title">
+            <div class="ai-card-head">
+              <div>
+                <h3 id="ai-ops-title">受控操作 JSON</h3>
+                <p>面向开发者；普通使用无需编辑。</p>
+              </div>
+            </div>
+            <div class="ai-op-templates">
+              <button type="button" id="ai-template-formula">公式模板</button>
+              <button type="button" id="ai-template-value" class="ai-secondary">值模板</button>
+              <button type="button" id="ai-template-clear" class="ai-secondary">清除模板</button>
+            </div>
+            <textarea id="ai-ops" class="ai-ops" rows="8" spellcheck="false" aria-label="AI 操作 JSON">[]</textarea>
+            <div class="ai-primary-actions">
+              <button type="button" id="ai-preview" class="ai-primary">预览这组 JSON</button>
+            </div>
+          </section>
+
+          <details class="ai-card ai-tools">
+            <summary>模型可使用的工具</summary>
+            <p>读取仅限 digest、slice、detail、errors；写入仅限 setFormula、setValue、clear，并且必须先预览。</p>
+            <div id="ai-tool-list" class="ai-tool-list"></div>
+          </details>
+        </div>
+      </div>
+    </div>
+    <footer class="ai-dock">
+      <div class="ai-suggestions" aria-label="常用任务示例">
+        <button type="button" data-ai-prompt="总结当前工作表的主要内容和异常">总结这张表</button>
+        <button type="button" data-ai-prompt="检查当前工作表中的公式错误，并告诉我如何修复">检查公式错误</button>
+        <button type="button" data-ai-prompt="根据当前选区，在右侧生成合适的汇总公式">生成汇总公式</button>
+      </div>
+      <div class="ai-composer">
+        <label id="ai-prompt-title" class="sr-only" for="ai-prompt">告诉 U AI 你想做什么</label>
+        <textarea id="ai-prompt" rows="1" placeholder="告诉 U AI 你想做什么…" spellcheck="true"></textarea>
+        <div class="ai-composer-tools">
+          <span class="ai-input-hint">Enter 发送 · Shift+Enter 换行</span>
+          <button type="button" id="ai-stop" class="ai-secondary" hidden>停止</button>
+          <button type="button" id="ai-send" class="ai-primary">发送</button>
+        </div>
+      </div>
+      <div class="ai-foot">修改前会先给你预览；确认后写入，并可用 Ctrl+Z 一步撤销。</div>
+    </footer>
+  </aside>
+</div>
+<script src="functions.js"></script>
+<script src="clipboard-rich.js?v=2-rich-clipboard"></script>
+<script src="font-runtime.js?v=1-md5-local-first"></script>
+<script src="app.js?v=20260913-freeze"></script>
+<script src="native-table-editor.js?v=2-native-table-runtime"></script>
+<script src="native-data-tools.js?v=2-pivot-local-refresh"></script>
+<script src="query-connections-editor.js?v=1-query-connections"></script>
+<script src="native-drawing-editor.js?v=10-theme-color"></script>
+<script src="page-review-editor.js?v=1-page-review"></script>
+<script src="selection-toolbar.js?v=20260908"></script>
+<script src="ui-kit.js?v=2-ai-launcher"></script>
+<script src="ai-assistant.js?v=9-typed-ops"></script>
+<script>if (location.search.includes('test=auto')) { const s = document.createElement('script'); s.src = 'selftest.js?v=104-omnidoc-fonts'; document.body.appendChild(s); }</script>
+</body>
+</html>

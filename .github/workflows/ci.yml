@@ -1,0 +1,36 @@
+name: Local edition
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: sudo apt-get update && sudo apt-get install -y pkg-config libssl-dev
+      - run: python -m pip install -r tools/requirements-math.txt
+      - run: python tools/check_public_boundary.py --history
+      - run: python -m unittest discover -s tools -p 'test_*.py'
+      - run: for script in web/*.js; do node --check "$script"; done
+      - run: cargo test --locked --manifest-path server/Cargo.toml
+      - run: cargo build --locked --manifest-path server/Cargo.toml
+      - name: Local HTTP smoke
+        shell: bash
+        run: |
+          server/target/debug/opencell-server --port=18143 > /tmp/unicell.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid"' EXIT
+          for attempt in $(seq 1 30); do
+            if curl --silent --fail http://127.0.0.1:18143/mcp-tools.json >/dev/null; then break; fi
+            sleep 1
+          done
+          python tools/local_smoke.py --url http://127.0.0.1:18143

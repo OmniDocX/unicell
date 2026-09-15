@@ -1,0 +1,35 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/vector-ir",
+    "crates/emf-core",
+    "crates/glyph2path",
+    "crates/emf2svg",
+    "crates/svg2emf",
+    "crates/emfsvg-cli",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license-file = "LICENSE"
+repository = "https://github.com/OmniDocX/vecmeta"
+
+[workspace.dependencies]
+vector-ir = { path = "crates/vector-ir" }
+emf-core = { path = "crates/emf-core" }
+emf2svg = { path = "crates/emf2svg" }
+svg2emf = { path = "crates/svg2emf" }
+glyph2path = { path = "crates/glyph2path" }
+roxmltree = "0.20"
+svgtypes = "0.15"
+kurbo = "0.11"
+clap = { version = "4", features = ["derive"] }
+thiserror = "2"
+base64 = "0.22"
+fontdb = "0.16"
+ttf-parser = "0.20"
+simplecss = "0.2"
+
+[profile.release]
+lto = true

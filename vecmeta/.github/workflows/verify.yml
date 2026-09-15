@@ -1,0 +1,33 @@
+name: Verify
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  rust:
+    runs-on: ubuntu-24.04
+    container: rust:1.88.0-bookworm
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Install test fonts
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends fonts-dejavu-core python3 git
+      - name: Test public source
+        run: |
+          cargo test --workspace --locked
+          cargo run --locked -p emfsvg-cli -- --help
+          cargo run --locked -p emfsvg-cli --example roundtrip
+      - name: Test and enforce publication boundary
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          python3 tools/test_public_boundary.py -v
+          python3 tools/check_public_boundary.py --history

@@ -1,0 +1,215 @@
+/* UniCell 设计令牌层 —— 参考 Google Workspace (Material 3) 视觉语言
+ *
+ * 载入顺序必须排在 style.css 之前：本文件只定义变量与最基础的排版/焦点/滚动条，
+ * 具体组件样式仍由 style.css 与各功能模块 CSS 负责，它们通过变量取色。
+ *
+ * 兼容性约定：style.css 与各功能 CSS 里历史遗留的 --accent / --hdr-bg / --hdr-border /
+ * --grid-line / --sel-border / --font 全部在这里重新指向 M3 令牌，因此旧规则无需逐条改写
+ * 也能自动跟随主题（含深色模式）。
+ */
+
+:root {
+  color-scheme: light;
+
+  /* ---------- M3 系统色（浅色） ---------- */
+  --m3-primary: #0b57d0;
+  --m3-on-primary: #ffffff;
+  --m3-primary-container: #d3e3fd;
+  --m3-on-primary-container: #0842a0;
+  --m3-secondary-container: #c2e7ff;
+  --m3-tertiary: #146c2e;
+  --m3-on-tertiary: #ffffff;
+  --m3-tertiary-container: #c4eed0;
+  --m3-error: #b3261e;
+  --m3-on-error: #ffffff;
+  --m3-error-container: #f9dedc;
+  --m3-on-error-container: #8c1d18;
+  --m3-warning: #a15c00;
+  --m3-warning-container: #ffeeda;
+
+  --m3-surface: #ffffff;
+  --m3-surface-container-lowest: #ffffff;
+  --m3-surface-container-low: #f8fafd;
+  --m3-surface-container: #f0f4f9;
+  --m3-surface-container-high: #e9eef6;
+  --m3-surface-container-highest: #dde3ea;
+  --m3-surface-dim: #d3dbe5;
+
+  --m3-on-surface: #1f1f1f;
+  --m3-on-surface-variant: #444746;
+  --m3-on-surface-muted: #6b6f6e;
+  --m3-outline: #747775;
+  --m3-outline-variant: #c4c7c5;
+  --m3-hairline: #e3e6ea;
+
+  --m3-inverse-surface: #303030;
+  --m3-inverse-on-surface: #f2f2f2;
+
+  /* 状态层：Material 用半透明 on-surface 叠加代替换色，深浅主题都成立 */
+  --state-hover: rgba(31, 31, 31, .078);
+  --state-pressed: rgba(31, 31, 31, .14);
+  --state-selected: var(--m3-tertiary-container);
+  --state-disabled-fg: rgba(31, 31, 31, .38);
+
+  /* ---------- 品牌 / 语义 ---------- */
+  --brand: #0f9d58;             /* UniCell 绿，仅用于品牌标记 */
+  --accent: var(--m3-primary);  /* 主交互色：选区、焦点、主按钮 */
+  --accent-fg: var(--m3-on-primary);
+  --accent-weak: var(--m3-primary-container);
+  --accent-soft: rgba(11, 87, 208, .10);
+  --toggle-bg: var(--m3-tertiary-container);   /* 工具栏按钮"已开启" */
+  --toggle-fg: var(--m3-tertiary);
+
+  /* ---------- 网格 ---------- */
+  --grid-bg: #ffffff;
+  --grid-line: #e0e2e6;
+  --hdr-bg: var(--m3-surface-container-low);
+  --hdr-bg-active: var(--m3-surface-container-highest);
+  --hdr-fg: var(--m3-on-surface-variant);
+  --hdr-border: var(--m3-outline-variant);
+  --sel-border: #1a73e8;
+  --sel-fill: rgba(14, 101, 235, .10);
+  --sel-handle: #1a73e8;
+  --rowhdr-w: 46px;
+  --colhdr-h: 24px;
+
+  /* ---------- 排版 ---------- */
+  --font-ui: "Google Sans", "Google Sans Text", Roboto, "Segoe UI", "Microsoft YaHei", "PingFang SC", sans-serif;
+  --font-body: Roboto, "Segoe UI", "Microsoft YaHei", "PingFang SC", sans-serif;
+  --font-mono: "Roboto Mono", Consolas, "Courier New", monospace;
+  /* 供 `font: var(--font)` 简写复用，值必须是合法的 font 简写 */
+  --font: 13px/1.4 Roboto, "Segoe UI", "Microsoft YaHei", "PingFang SC", sans-serif;
+
+  /* ---------- 形状 ---------- */
+  --r-control: 4px;    /* 工具栏按钮 */
+  --r-field: 6px;      /* 输入框、下拉 */
+  --r-menu: 8px;       /* 菜单、弹层 */
+  --r-dialog: 12px;    /* 对话框 */
+  --r-pill: 999px;
+
+  /* ---------- 阴影（M3 elevation） ---------- */
+  --sh-1: 0 1px 2px rgba(0, 0, 0, .12), 0 1px 3px 1px rgba(0, 0, 0, .06);
+  --sh-2: 0 2px 6px 2px rgba(0, 0, 0, .12), 0 1px 2px rgba(0, 0, 0, .10);
+  --sh-3: 0 4px 8px 3px rgba(0, 0, 0, .12), 0 1px 3px rgba(0, 0, 0, .14);
+  --sh-menu: 0 2px 6px 2px rgba(0, 0, 0, .15);
+  --sh-dialog: 0 8px 32px rgba(0, 0, 0, .22), 0 2px 8px rgba(0, 0, 0, .10);
+  --scrim: rgba(32, 33, 36, .32);
+
+  /* ---------- 动效 ---------- */
+  --ease: cubic-bezier(.2, 0, 0, 1);
+  --dur-fast: 90ms;
+  --dur: 140ms;
+}
+
+/* 深色主题：只重绑令牌，组件规则完全复用。 */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --m3-primary: #a8c7fa;
+  --m3-on-primary: #062e6f;
+  --m3-primary-container: #0842a0;
+  --m3-on-primary-container: #d3e3fd;
+  --m3-secondary-container: #004a77;
+  --m3-tertiary: #6dd58c;
+  --m3-on-tertiary: #0a3818;
+  --m3-tertiary-container: #0f5223;
+  --m3-error: #f2b8b5;
+  --m3-on-error: #601410;
+  --m3-error-container: #8c1d18;
+  --m3-on-error-container: #f9dedc;
+  --m3-warning: #f5c26b;
+  --m3-warning-container: #4a3208;
+
+  --m3-surface: #1b1b1f;
+  --m3-surface-container-lowest: #131316;
+  --m3-surface-container-low: #1f1f23;
+  --m3-surface-container: #232327;
+  --m3-surface-container-high: #2d2d31;
+  --m3-surface-container-highest: #38383c;
+  --m3-surface-dim: #131316;
+
+  --m3-on-surface: #e3e3e3;
+  --m3-on-surface-variant: #c4c7c5;
+  --m3-on-surface-muted: #9aa0a6;
+  --m3-outline: #8e918f;
+  --m3-outline-variant: #444746;
+  --m3-hairline: #35363a;
+
+  --m3-inverse-surface: #e3e3e3;
+  --m3-inverse-on-surface: #303030;
+
+  --state-hover: rgba(227, 227, 227, .10);
+  --state-pressed: rgba(227, 227, 227, .18);
+  --state-disabled-fg: rgba(227, 227, 227, .38);
+
+  --brand: #6dd58c;
+  --accent-soft: rgba(168, 199, 250, .16);
+
+  --grid-bg: #1b1b1f;
+  --grid-line: #35363a;
+  --hdr-bg: var(--m3-surface-container-low);
+  --hdr-bg-active: var(--m3-surface-container-highest);
+  --sel-border: #a8c7fa;
+  --sel-fill: rgba(168, 199, 250, .14);
+  --sel-handle: #a8c7fa;
+
+  --sh-menu: 0 2px 6px 2px rgba(0, 0, 0, .55);
+  --sh-dialog: 0 8px 32px rgba(0, 0, 0, .6), 0 2px 8px rgba(0, 0, 0, .4);
+  --scrim: rgba(0, 0, 0, .55);
+}
+
+/* 深色下把浏览器原生控件与用户内容压回可读范围。
+   单元格颜色来自工作簿数据（白底黑字），整体反相会毁掉数据保真，
+   所以只压暗网格容器背景，单元格自身样式保持工作簿原值。 */
+:root[data-theme="dark"] select,
+:root[data-theme="dark"] input,
+:root[data-theme="dark"] textarea {
+  color-scheme: dark;
+}
+
+/* ---------- 基础排版 ---------- */
+body {
+  font: var(--font);
+  color: var(--m3-on-surface);
+  background: var(--m3-surface);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* ---------- 可见焦点环（键盘可达性） ----------
+ * 只在键盘导航时出现，鼠标点击不会留下方框。 */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+  border-radius: var(--r-control);
+}
+button:focus:not(:focus-visible) { outline: none; }
+
+/* ---------- 滚动条（Google 同款细窄样式） ---------- */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--m3-outline-variant) transparent;
+}
+::-webkit-scrollbar { width: 14px; height: 14px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  min-height: 32px;
+  border: 4px solid transparent;
+  border-radius: var(--r-pill);
+  background: var(--m3-outline-variant);
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--m3-outline); background-clip: padding-box; }
+::-webkit-scrollbar-corner { background: transparent; }
+
+/* ---------- 动效偏好 ---------- */
+/* 只覆盖 transition-duration 会让 transition-property 退回默认的 all，
+   等于给每个元素都打开过渡；网格用内联 style 改宽高时会读到过渡中的旧尺寸。
+   所以这里整条关掉，而不是把时长改短。 */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition: none !important;
+    animation: none !important;
+    scroll-behavior: auto !important;
+  }
+}

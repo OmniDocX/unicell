@@ -1,0 +1,453 @@
+/* UniCell UI Kit —— Toast / Tooltip / 命令面板 / 通用对话框
+ *
+ * 本文件最后载入：除了新增组件，它还负责把各功能模块 CSS 里写死的中性色
+ * （#fff / #222 / #ddd / #fafafa …）统一改写成 theme.css 的令牌，
+ * 这样深色模式无需逐个模块重构就能整体生效。
+ */
+
+/* ================= Toast ================= */
+.uk-toasts {
+  position: fixed; left: 50%; bottom: 46px; z-index: 100200;
+  display: flex; flex-direction: column-reverse; align-items: center; gap: 8px;
+  transform: translateX(-50%); pointer-events: none;
+}
+.uk-toast {
+  display: flex; align-items: center; gap: 12px;
+  max-width: min(560px, calc(100vw - 32px)); padding: 12px 16px;
+  border-radius: var(--r-control); pointer-events: auto;
+  background: var(--m3-inverse-surface); color: var(--m3-inverse-on-surface);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, .28);
+  font: 14px/20px var(--font-ui);
+  animation: uk-toast-in 160ms var(--ease);
+}
+.uk-toast[data-tone="error"] { background: var(--m3-error-container); color: var(--m3-on-error-container); }
+.uk-toast[data-tone="success"] { background: var(--m3-tertiary-container); color: var(--m3-tertiary); }
+.uk-toast[data-tone="error"] button:hover,
+.uk-toast[data-tone="success"] button:hover { background: rgba(0, 0, 0, .10); }
+.uk-toast span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.uk-toast button {
+  flex: none; margin: -6px -8px -6px 0; padding: 6px 8px; border: 0; border-radius: var(--r-control);
+  background: transparent; color: inherit; cursor: pointer;
+  font: 500 13px/1 var(--font-ui); text-transform: uppercase; letter-spacing: .4px; opacity: .85;
+}
+.uk-toast button:hover { opacity: 1; background: rgba(255, 255, 255, .14); }
+.uk-toast.leaving { animation: uk-toast-out 140ms var(--ease) forwards; }
+@keyframes uk-toast-in { from { opacity: 0; transform: translateY(14px); } }
+@keyframes uk-toast-out { to { opacity: 0; transform: translateY(8px); } }
+
+/* ================= Tooltip ================= */
+.uk-tip {
+  position: fixed; z-index: 100300; max-width: 280px; padding: 6px 9px;
+  border-radius: var(--r-control); pointer-events: none;
+  background: var(--m3-inverse-surface); color: var(--m3-inverse-on-surface);
+  box-shadow: 0 2px 6px rgba(60, 64, 67, .3);
+  font: 500 12px/16px var(--font-ui); letter-spacing: .1px; white-space: pre-line;
+  opacity: 0; transform: translateY(-2px);
+  transition: opacity 80ms linear, transform 80ms var(--ease);
+}
+.uk-tip.show { opacity: 1; transform: none; }
+.uk-tip kbd {
+  display: inline-block; margin-left: 5px; padding: 0 4px; border-radius: 3px;
+  background: rgba(255, 255, 255, .16); font: 11px/16px var(--font-mono);
+}
+
+/* ================= 通用对话框外壳 ================= */
+.uk-dialog {
+  position: fixed; inset: 0; z-index: 100100; display: grid; place-items: center;
+  padding: 24px; background: var(--scrim);
+}
+.uk-dialog[hidden] { display: none; }
+.uk-dialog-card {
+  display: flex; flex-direction: column;
+  width: min(520px, calc(100vw - 40px)); max-height: calc(100vh - 64px); overflow: hidden;
+  border-radius: var(--r-dialog); background: var(--m3-surface); color: var(--m3-on-surface);
+  box-shadow: var(--sh-dialog);
+  animation: uk-dialog-in 160ms var(--ease);
+}
+.uk-dialog-wide { width: min(860px, calc(100vw - 40px)); }
+@keyframes uk-dialog-in { from { opacity: 0; transform: scale(.97) translateY(8px); } }
+.uk-dialog-head {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 20px 20px 12px;
+}
+.uk-dialog-head h2 { font: 500 20px/28px var(--font-ui); color: var(--m3-on-surface); }
+.uk-dialog-body { padding: 0 20px 20px; overflow: auto; }
+.uk-icon-btn {
+  flex: none; width: 34px; height: 34px; border: 0; border-radius: 50%;
+  background: transparent; color: var(--m3-on-surface-variant); cursor: pointer;
+  transition: background var(--dur-fast) var(--ease);
+}
+.uk-icon-btn::before { --ic-size: 19px; }
+.uk-icon-btn:hover { background: var(--state-hover); color: var(--m3-on-surface); }
+
+/* ================= 快捷键总览 ================= */
+.shortcuts-body { columns: 2; column-gap: 32px; }
+@media (max-width: 720px) { .shortcuts-body { columns: 1; } }
+.sc-group { break-inside: avoid; margin-bottom: 22px; }
+.sc-group h3 {
+  margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px solid var(--m3-outline-variant);
+  color: var(--m3-on-surface-variant); font: 500 12px/16px var(--font-ui);
+  letter-spacing: .8px; text-transform: uppercase;
+}
+.sc-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  min-height: 30px; padding: 3px 0;
+}
+.sc-row > span { min-width: 0; color: var(--m3-on-surface); font-size: 13px; }
+.sc-keys { flex: none; display: flex; align-items: center; gap: 3px; }
+kbd {
+  display: inline-block; min-width: 20px; padding: 2px 6px; text-align: center;
+  border: 1px solid var(--m3-outline-variant); border-bottom-width: 2px; border-radius: 4px;
+  background: var(--m3-surface-container); color: var(--m3-on-surface-variant);
+  font: 500 11px/15px var(--font-mono);
+}
+
+/* ================= 命令面板 ================= */
+.cmdk {
+  position: fixed; inset: 0; z-index: 100400; display: grid; place-items: start center;
+  padding: min(14vh, 120px) 20px 20px; background: var(--scrim);
+}
+.cmdk[hidden] { display: none; }
+.cmdk-card {
+  display: flex; flex-direction: column;
+  width: min(620px, 100%); max-height: min(560px, calc(100vh - 200px)); overflow: hidden;
+  border-radius: var(--r-dialog); background: var(--m3-surface);
+  box-shadow: var(--sh-dialog);
+  animation: uk-dialog-in 150ms var(--ease);
+}
+.cmdk-field {
+  display: flex; align-items: center; gap: 12px; flex: none;
+  padding: 0 16px; height: 56px; border-bottom: 1px solid var(--m3-outline-variant);
+}
+.cmdk-ic { --ic-size: 20px; flex: none; color: var(--m3-on-surface-variant); }
+#cmdk-input {
+  flex: 1; min-width: 0; height: 100%; border: 0; outline: none;
+  background: transparent; color: var(--m3-on-surface); font: 16px/1 var(--font-ui);
+}
+#cmdk-input::placeholder { color: var(--m3-on-surface-muted); }
+.cmdk-esc {
+  flex: none; border-bottom-width: 2px;
+}
+.cmdk-list { flex: 1; min-height: 0; overflow: auto; padding: 8px; }
+.cmdk-section {
+  padding: 10px 10px 4px; color: var(--m3-on-surface-muted);
+  font: 500 11px/14px var(--font-ui); letter-spacing: .8px; text-transform: uppercase;
+}
+.cmdk-item {
+  display: flex; align-items: center; gap: 12px; width: 100%;
+  padding: 9px 10px; border: 0; border-radius: var(--r-control);
+  background: transparent; color: var(--m3-on-surface); text-align: left; cursor: pointer;
+  font: 14px/20px var(--font-ui);
+}
+.cmdk-item::before { --ic-size: 19px; flex: none; color: var(--m3-on-surface-variant); }
+.cmdk-item:not([data-ic])::before {
+  content: ""; display: inline-block; flex: none; width: 19px; height: 19px;
+}
+.cmdk-item .cmdk-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cmdk-item .cmdk-where { flex: none; color: var(--m3-on-surface-muted); font-size: 12px; }
+.cmdk-item .cmdk-keys { flex: none; display: flex; gap: 3px; }
+.cmdk-item mark { background: transparent; color: var(--accent); font-weight: 600; }
+.cmdk-item:hover { background: var(--state-hover); }
+.cmdk-item[aria-selected="true"] {
+  background: var(--m3-primary-container); color: var(--m3-on-primary-container);
+}
+.cmdk-item[aria-selected="true"]::before,
+.cmdk-item[aria-selected="true"] .cmdk-where { color: inherit; opacity: .8; }
+.cmdk-item[aria-selected="true"] mark { color: inherit; text-decoration: underline; }
+.cmdk-empty { padding: 36px 16px; color: var(--m3-on-surface-muted); text-align: center; font-size: 13px; }
+.cmdk-foot {
+  display: flex; align-items: center; gap: 18px; flex: none;
+  padding: 9px 16px; border-top: 1px solid var(--m3-outline-variant);
+  background: var(--m3-surface-container-low); color: var(--m3-on-surface-muted); font-size: 12px;
+}
+.cmdk-foot span { display: flex; align-items: center; gap: 4px; }
+
+/* =========================================================================
+ * 主题归一化：把各功能模块写死的中性色改写成令牌
+ * 选择器与原文件保持一致，靠载入顺序覆盖，因此不改动原模块也能进入深色模式。
+ * ========================================================================= */
+
+/* ---- 对话框外壳 ---- */
+.nte-dialog, .native-data-dialog, .query-connection-dialog, .pre-dialog,
+.obj-dialog, #udoc-dialog, #find-dialog, #cf-dialog, #dv-dialog, #pivot-cache-dialog,
+#cellfmt-dialog, #fnx-dialog, #names-dialog, .calc-iteration-panel, .paste-special-card,
+.wi-window, .recent-files-menu, .color-pop, .native-editor {
+  background: var(--m3-surface);
+  color: var(--m3-on-surface);
+  border-color: var(--m3-hairline);
+  border-radius: var(--r-dialog);
+  box-shadow: var(--sh-dialog);
+}
+.recent-files-menu, .color-pop { border-radius: var(--r-menu); box-shadow: var(--sh-menu); }
+
+/* ---- 标题栏 / 分节线 ---- */
+.nte-title, .pre-title, .nte-footer, .pre-footer,
+#cellfmt-dialog .fd-btns, #dv-dialog > .fd-btns, #pivot-cache-dialog .fd-btns,
+.paste-special-titlebar, .paste-special-actions, .wi-titlebar, .nte-tabs, .wi-tabs {
+  border-color: var(--m3-outline-variant);
+}
+.wi-titlebar { background: var(--m3-surface-container-low); }
+.wi-titlebar strong { color: var(--m3-on-surface); }
+.nte-subtitle, .nte-status, .nte-hint, .nte-empty, .nte-empty-small,
+.wi-help, .wi-note, .wi-empty, .cf-muted, .pivot-loading,
+#names-info, #fd-info, #cf-info, #dv-info, #pivot-info {
+  color: var(--m3-on-surface-muted);
+}
+
+/* ---- 侧栏 / 列表 / 卡片 ---- */
+.nte-sidebar, .pre-sidebar, #dv-dialog .dv-rules-pane, #pivot-cache-dialog .pivot-list-pane {
+  background: var(--m3-surface-container-low);
+  border-color: var(--m3-outline-variant);
+}
+.nte-list, #cf-rule-list, #dv-dialog #dv-rule-list, #pivot-cache-list, #fnx-list, #names-list,
+.wi-scenario-list, .wi-matrix-wrap {
+  background: var(--m3-surface-container-lowest);
+  border-color: var(--m3-outline-variant);
+  border-radius: var(--r-field);
+}
+.nte-list h4 {
+  background: var(--m3-surface-container);
+  color: var(--m3-on-surface-variant);
+  border-color: var(--m3-outline-variant);
+}
+.nte-list > button, .pivot-cache-item, #dv-dialog .dv-rule-item, .wi-scenario-row {
+  background: transparent;
+  color: var(--m3-on-surface);
+  border-color: var(--m3-hairline);
+}
+.nte-list > button:hover, .pivot-cache-item:hover, #dv-dialog .dv-rule-item:hover,
+.fnx-item:hover, .recent-file-item:hover {
+  background: var(--state-hover);
+}
+.nte-list > button.active, .pivot-cache-item.active, #dv-dialog .dv-rule-item.active,
+.fnx-item.on {
+  background: var(--m3-primary-container);
+  color: var(--m3-on-primary-container);
+  box-shadow: inset 3px 0 var(--accent);
+}
+.nte-section, .nte-column-card, .nte-filter-card, .nte-sort-row,
+#cf-dialog .cf-rule, #cf-dialog .cf-create, .pre-section {
+  background: var(--m3-surface-container-low);
+  border-color: var(--m3-outline-variant);
+  border-radius: var(--r-field);
+}
+#pivot-cache-meta { background: var(--m3-surface-container-low); border-color: var(--m3-outline-variant); }
+#pivot-cache-meta dt { color: var(--m3-on-surface-muted); }
+#pivot-cache-meta dd { color: var(--m3-on-surface); }
+
+/* ---- 表单控件 ---- */
+.nte-field > input, .nte-field > select, .nte-field > textarea,
+.nte-condition-row input, .nte-condition-row select, .nte-json,
+#cf-dialog .fd-row input, #cf-dialog .fd-row select, #cf-dialog .cf-range,
+#dv-dialog .fd-row input, #dv-dialog .fd-row select, #dv-dialog .fd-row textarea,
+#pivot-cache-dialog .fd-row select, #pivot-cache-dialog .fd-row input,
+#cellfmt-dialog .fd-row > select, #cellfmt-dialog .fd-row > input,
+#fnx-dialog input, #names-dialog input, #find-dialog .fd-row input,
+.wi-grid input, .wi-grid select, .wi-grid textarea,
+.calc-iteration-panel input[type="number"], .obj-dialog textarea {
+  background: var(--m3-surface);
+  color: var(--m3-on-surface);
+  border-color: var(--m3-outline-variant);
+  border-radius: var(--r-control);
+}
+.nte-field > input:focus, .nte-field > select:focus, .nte-field > textarea:focus,
+.wi-grid input:focus, .wi-grid select:focus, .wi-grid textarea:focus,
+#dv-dialog .fd-row input:focus, #dv-dialog .fd-row select:focus, #dv-dialog .fd-row textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-soft);
+}
+.nte-field > span, .nte-check, #cf-dialog .fd-row label, #dv-dialog .fd-row label,
+#cellfmt-dialog .fd-row label, #find-dialog .fd-row label, .wi-grid label, .wi-checks {
+  color: var(--m3-on-surface-variant);
+}
+
+/* ---- 按钮 ---- */
+.nte-side-actions button, .nte-toolbar button, .nte-section > button, .nte-row-actions button,
+.nte-footer button, .nte-condition-row button, .nte-column-card header button,
+.nte-filter-card header button, .wi-actions button, .wi-row-actions button,
+#cf-dialog .cf-toolbar button, #cf-dialog .cf-rule button, #cf-dialog .cf-create-actions button,
+#cf-dialog .fd-btns button, #cellfmt-dialog .cfmt-brgrid button, #cellfmt-dialog #cfmt-nofill,
+#dv-dialog .dv-rule-actions button, #dv-dialog > .fd-btns button, #pivot-cache-dialog .fd-btns button,
+#cellfmt-dialog .fd-btns button, #names-dialog .fd-btns button, #fnx-dialog .fd-btns button,
+#find-dialog .fd-btns button, .calc-iteration-panel button, .obj-dialog .fd-btns button,
+.paste-special-actions button, #pivot-refresh-all, .recent-files-clear {
+  background: var(--m3-surface);
+  color: var(--m3-on-surface);
+  border-color: var(--m3-outline-variant);
+  border-radius: var(--r-pill);
+  transition: background var(--dur-fast) var(--ease);
+}
+.nte-side-actions button:hover, .nte-footer button:hover, .wi-actions button:hover,
+.wi-row-actions button:hover, #dv-dialog > .fd-btns button:hover, #cellfmt-dialog .fd-btns button:hover,
+.calc-iteration-panel button:hover, .paste-special-actions button:hover, .recent-files-clear:hover {
+  background: var(--m3-surface-container);
+  border-color: var(--m3-outline-variant);
+}
+button.primary, .wi-actions button.primary,
+.nte-side-actions button.primary, .nte-section > button.primary, .nte-footer button.primary {
+  background: var(--accent) !important;
+  color: var(--accent-fg) !important;
+  border-color: var(--accent) !important;
+}
+button.danger, .nte-status.error, #cf-dialog button.danger { color: var(--m3-error); }
+.nte-title > button, .pre-title > button, .paste-special-titlebar button,
+.wi-titlebar button, #cf-dialog .fd-title button, #dv-dialog .fd-title button,
+#cellfmt-dialog .fd-title button, #fnx-dialog .fd-title button, #names-dialog .fd-title button,
+#find-dialog .fd-title button, #udoc-dialog .fd-title button, .obj-dialog .fd-title button,
+#pivot-cache-dialog .fd-title button {
+  color: var(--m3-on-surface-variant); border-radius: 50%;
+}
+.nte-title > button:hover, .paste-special-titlebar button:hover, .wi-titlebar button:hover {
+  background: var(--state-hover); color: var(--m3-on-surface);
+}
+
+/* ---- 选项卡 ---- */
+.nte-tabs button, .wi-tabs button, #cellfmt-dialog .cfmt-tab, .pre-tabs button {
+  color: var(--m3-on-surface-variant); background: transparent;
+}
+.nte-tabs button.active, #cellfmt-dialog .cfmt-tab.active, .pre-tabs button.active {
+  color: var(--accent); border-bottom-color: var(--accent);
+}
+.wi-tabs button.active {
+  background: var(--m3-surface); color: var(--accent); border-color: var(--m3-outline-variant);
+}
+
+/* ---- 提示条 ---- */
+.nte-note, #pivot-cache-dialog .pivot-note {
+  background: var(--m3-primary-container); color: var(--m3-on-primary-container);
+  border-color: var(--m3-outline-variant);
+}
+.nte-warning, #cf-dialog .cf-extension-note, #pivot-cache-dialog .pivot-warning, #dv-input-message {
+  background: var(--m3-warning-container); color: var(--m3-warning); border-color: var(--m3-warning);
+}
+#dv-input-message span, #dv-input-message strong { color: inherit; }
+.wi-result { background: var(--m3-surface-container-low); color: var(--m3-on-surface-variant); border-color: var(--m3-outline-variant); }
+.wi-matrix { background: var(--m3-surface); }
+.wi-matrix td { border-color: var(--m3-outline-variant); color: var(--m3-on-surface); }
+
+/* ---- 单元格内下拉（数据验证） ---- */
+#dv-cell-list {
+  background: var(--m3-surface); border-color: var(--m3-hairline);
+  border-radius: var(--r-menu); box-shadow: var(--sh-menu); padding: 5px;
+}
+#dv-cell-list button {
+  background: transparent; color: var(--m3-on-surface); border-radius: var(--r-control);
+}
+#dv-cell-list button:hover, #dv-cell-list button:focus { background: var(--state-hover); }
+#dv-cell-dropdown {
+  background: var(--m3-surface-container); border-color: var(--m3-outline-variant);
+  color: var(--m3-on-surface-variant);
+}
+
+/* ---- 遮罩 ---- */
+.what-if-dialog, .paste-special-dialog, .native-editor-overlay { background: var(--scrim); }
+
+/* ---- 对象与全屏浮层 ---- */
+.cell-obj { background: var(--grid-bg); border-color: var(--m3-outline-variant); }
+.obj-fs-bar { background: var(--m3-inverse-surface); color: var(--m3-inverse-on-surface); }
+
+/* =========================================================================
+ * 深色模式兜底
+ *
+ * 上面那一段是按各模块原有选择器逐条改写的，覆盖不到的地方在浅色下无害
+ * （原色本来就是浅底深字），但在深色下会变成白底白字。这里按"对话框根 +
+ * 元素类型"整片兜住，不再依赖是否逐条枚举完整。
+ *
+ * 只在 [data-theme="dark"] 下生效，浅色主题保持各模块作者原样。
+ * 选择器带上 :root[data-theme="dark"] 前缀，特异性高于模块内的 #id .class 规则。
+ * ========================================================================= */
+
+:root[data-theme="dark"] {
+  --uk-panel: var(--m3-surface-container-low);
+  --uk-card: var(--m3-surface-container);
+  --uk-field: var(--m3-surface-container-lowest);
+}
+
+/* 面板与卡片 */
+:root[data-theme="dark"] :is(
+  .nte-sidebar, .pre-sidebar, .native-data-sidebar, .qc-nav, .qc-mode-tabs,
+  .pre-checks, .native-axis, .native-refresh-layout, .native-value-card,
+  .native-filter-row, .native-connection-row, .nte-column-card, .nte-filter-card,
+  .nte-sort-row, .pre-break-card, .pre-range-card, .pre-comment-card, .qc-card,
+  .native-axis-item, .native-data-label-card, .native-trendline-card, .native-errorbar-card
+) {
+  background: var(--uk-card);
+  border-color: var(--m3-outline-variant);
+  color: var(--m3-on-surface);
+}
+
+/* 列表容器与列表项 */
+:root[data-theme="dark"] :is(
+  .nte-list, .pre-sheet-list, .native-data-list, .qc-list, .native-refresh-preview,
+  .native-field-list, .qc-kinds
+) {
+  background: var(--uk-field);
+  border-color: var(--m3-outline-variant);
+}
+:root[data-theme="dark"] :is(
+  .nte-list, .pre-sheet-list, .native-data-list, .qc-list, .native-field-list
+) > button {
+  background: transparent;
+  color: var(--m3-on-surface);
+  border-color: var(--m3-hairline);
+}
+:root[data-theme="dark"] :is(
+  .nte-list, .pre-sheet-list, .native-data-list, .qc-list, .native-field-list
+) > button:hover { background: var(--state-hover); }
+:root[data-theme="dark"] :is(
+  .nte-list, .pre-sheet-list, .native-data-list, .qc-list
+) > button.active {
+  background: var(--m3-primary-container);
+  color: var(--m3-on-primary-container);
+}
+:root[data-theme="dark"] .nte-list h4 {
+  background: var(--m3-surface-container-high);
+  color: var(--m3-on-surface-variant);
+  border-color: var(--m3-outline-variant);
+}
+
+/* 对话框根内部的表单控件与普通按钮 */
+:root[data-theme="dark"] :is(
+  .nte-dialog, .native-data-dialog, .query-connection-dialog, .pre-dialog, .native-editor,
+  #cf-dialog, #dv-dialog, #pivot-cache-dialog, #cellfmt-dialog, #fnx-dialog, #names-dialog,
+  #find-dialog, #udoc-dialog, .obj-dialog, .calc-iteration-panel, .wi-window,
+  .paste-special-card, .recent-files-menu, .color-pop, #dv-cell-list
+) :is(input:not([type="color"]):not([type="range"]):not([type="checkbox"]):not([type="radio"]), select, textarea) {
+  background: var(--uk-field);
+  color: var(--m3-on-surface);
+  border-color: var(--m3-outline-variant);
+}
+:root[data-theme="dark"] :is(
+  .nte-dialog, .native-data-dialog, .query-connection-dialog, .pre-dialog, .native-editor,
+  #cf-dialog, #dv-dialog, #pivot-cache-dialog, #cellfmt-dialog, #fnx-dialog, #names-dialog,
+  #find-dialog, #udoc-dialog, .obj-dialog, .calc-iteration-panel, .wi-window,
+  .paste-special-card, .recent-files-menu, .color-pop
+) button:not(.primary) {
+  background: var(--uk-panel);
+  color: var(--m3-on-surface);
+  border-color: var(--m3-outline-variant);
+}
+:root[data-theme="dark"] :is(
+  .nte-dialog, .native-data-dialog, .query-connection-dialog, .pre-dialog, .native-editor,
+  #cf-dialog, #dv-dialog, #pivot-cache-dialog, #cellfmt-dialog, #fnx-dialog, #names-dialog,
+  #find-dialog, #udoc-dialog, .obj-dialog, .calc-iteration-panel, .wi-window,
+  .paste-special-card
+) button:not(.primary):hover {
+  background: var(--m3-surface-container-high);
+}
+
+/* 等宽预览区 */
+:root[data-theme="dark"] :is(.pre-json, .qc-raw, .nte-json, #udoc-dialog pre, .wi-result) {
+  background: var(--m3-surface-container-lowest);
+  color: var(--m3-on-surface-variant);
+  border-color: var(--m3-outline-variant);
+}
+
+/* 提示条在深色下用低饱和底色，避免整块高饱和蓝挡住内容 */
+:root[data-theme="dark"] :is(.nte-note, #pivot-cache-dialog .pivot-note, .qc-note, .native-data-note) {
+  background: var(--m3-surface-container-high);
+  color: var(--m3-on-surface-variant);
+  border-color: var(--m3-outline-variant);
+  border-left: 3px solid var(--accent);
+}

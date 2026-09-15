@@ -1,0 +1,7 @@
+/target
+.env
+.env.*
+!.env.example
+/tests/resources/
+/test1.emf
+/test1.svg

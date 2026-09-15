@@ -1,0 +1,68 @@
+.query-connection-dialog {
+  position: fixed; inset: 50% auto auto 50%; z-index: 108; transform: translate(-50%, -50%);
+  width: min(1180px, calc(100vw - 32px)); height: min(790px, calc(100vh - 42px));
+  display: flex; flex-direction: column; overflow: hidden; color: #222; background: #fff;
+  border: 1px solid #8d8d8d; border-radius: 7px; box-shadow: 0 16px 48px rgba(0,0,0,.34);
+  font: var(--font);
+}
+.query-connection-dialog[hidden] { display: none; }
+.qc-title { display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 0 13px; border-bottom: 1px solid #d8d8d8; }
+.qc-title strong { font-size: 15px; }
+.qc-title span { color: #68747e; font-size: 12px; }
+.qc-title .qc-close { margin-left: auto; border: 0; background: transparent; color: #666; cursor: pointer; font-size: 21px; }
+.qc-mode-tabs { display: flex; gap: 3px; padding: 7px 12px 0; background: #fafafa; border-bottom: 1px solid #ddd; }
+.qc-mode-tabs button { padding: 7px 13px; border: 0; border-bottom: 2px solid transparent; background: transparent; cursor: pointer; font: var(--font); }
+.qc-mode-tabs button.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 700; }
+.qc-workbook, .qc-m-runtime { min-height: 0; flex: 1; }
+.qc-workbook { display: grid; grid-template-columns: 265px minmax(0,1fr); }
+.qc-workbook[hidden], .qc-m-runtime[hidden] { display: none; }
+.qc-nav { min-height: 0; display: flex; flex-direction: column; background: #fafafa; border-right: 1px solid #ddd; }
+.qc-kinds { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 9px; border-bottom: 1px solid #ddd; }
+.qc-kinds button { min-height: 31px; padding: 4px 7px; overflow: hidden; border: 1px solid #ccc; border-radius: 3px; background: #fff; text-align: left; text-overflow: ellipsis; white-space: nowrap; cursor: pointer; font: var(--font); }
+.qc-kinds button.active { color: var(--accent); background: var(--accent-weak); border-color: var(--accent); font-weight: 700; }
+.qc-list { min-height: 0; flex: 1; overflow: auto; }
+.qc-list button { display: block; width: 100%; padding: 9px 10px; overflow: hidden; border: 0; border-bottom: 1px solid #e5e5e5; background: #fff; text-align: left; text-overflow: ellipsis; white-space: nowrap; cursor: pointer; font: var(--font); }
+.qc-list button small { display: block; margin-top: 2px; overflow: hidden; color: #888; text-overflow: ellipsis; }
+.qc-list button.active { background: var(--accent-weak); box-shadow: inset 3px 0 var(--accent); }
+.qc-editor { min-width: 0; min-height: 0; overflow: auto; padding: 13px; }
+.qc-empty { padding: 55px 20px; color: #888; text-align: center; }
+.qc-card { margin-bottom: 12px; padding: 11px; border: 1px solid #ddd; border-radius: 4px; background: #fff; }
+.qc-card h3 { margin: 0 0 9px; font-size: 13px; }
+.qc-card p { margin: 6px 0; }
+.qc-form { display: grid; grid-template-columns: repeat(2,minmax(210px,1fr)); gap: 8px 15px; }
+.qc-field { display: flex; align-items: center; gap: 7px; min-width: 0; }
+.qc-field > span { width: 124px; flex: none; color: #555; }
+.qc-field input[type=text], .qc-field input[type=number], .qc-field select { min-width: 0; height: 29px; flex: 1; padding: 0 7px; border: 1px solid #bfbfbf; border-radius: 3px; font: var(--font); }
+.qc-field.wide { grid-column: 1 / -1; }
+.qc-field.wide textarea { min-width: 0; min-height: 65px; flex: 1; resize: vertical; padding: 6px 7px; border: 1px solid #bfbfbf; border-radius: 3px; font: 12px/1.45 Consolas, monospace; }
+.qc-checks { display: grid; grid-template-columns: repeat(3,minmax(150px,1fr)); gap: 7px; }
+.qc-checks label { display: flex; align-items: center; gap: 6px; }
+.qc-read-grid { display: grid; grid-template-columns: 150px minmax(0,1fr); gap: 5px 10px; font-size: 12px; }
+.qc-read-grid dt { color: #666; }
+.qc-read-grid dd { min-width: 0; margin: 0; overflow-wrap: anywhere; }
+.qc-secret { padding: 5px 7px; color: #7b4a00; background: #fff7e6; border: 1px solid #edcf91; border-radius: 3px; font: 12px/1.4 Consolas, monospace; overflow-wrap: anywhere; }
+.qc-badge { display: inline-block; margin: 0 5px 4px 0; padding: 2px 6px; color: #445; background: #eef2f5; border-radius: 10px; font-size: 11px; }
+.qc-warning { color: #985800; }
+.qc-muted { color: #777; font-size: 12px; }
+.qc-raw { max-height: 260px; overflow: auto; margin: 7px 0 0; padding: 8px; color: #333; background: #f7f7f7; border: 1px solid #ddd; font: 11px/1.45 Consolas, monospace; white-space: pre-wrap; overflow-wrap: anywhere; }
+.qc-footer { display: flex; align-items: center; gap: 8px; min-height: 46px; padding: 7px 12px; border-top: 1px solid #ddd; }
+.qc-status { min-width: 0; flex: 1; overflow: hidden; color: #666; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; }
+.qc-footer button, .qc-m-toolbar button { min-height: 29px; padding: 0 13px; border: 1px solid #aaa; border-radius: 3px; background: #fff; cursor: pointer; font: var(--font); }
+.qc-footer button.primary, .qc-m-toolbar button.primary { color: #fff; background: var(--accent); border-color: var(--accent); }
+.qc-m-runtime { overflow: auto; padding: 13px; }
+.qc-m-layout { display: grid; grid-template-columns: minmax(300px,.8fr) minmax(420px,1.2fr); gap: 12px; min-height: 100%; }
+.qc-m-side { min-width: 0; }
+.qc-m-code, .qc-m-input { width: 100%; resize: vertical; padding: 8px; border: 1px solid #aaa; border-radius: 3px; font: 12px/1.5 Consolas, monospace; }
+.qc-m-code { min-height: 225px; }
+.qc-m-input { min-height: 150px; }
+.qc-m-toolbar { display: flex; align-items: center; gap: 8px; margin: 8px 0; }
+.qc-m-toolbar input, .qc-m-toolbar select { height: 29px; padding: 0 7px; border: 1px solid #bbb; border-radius: 3px; font: var(--font); }
+.qc-preview { max-height: 475px; overflow: auto; border: 1px solid #ccc; }
+.qc-preview table { width: max-content; min-width: 100%; border-collapse: collapse; font-size: 12px; }
+.qc-preview th, .qc-preview td { max-width: 280px; padding: 5px 8px; overflow: hidden; border: 1px solid #ddd; text-overflow: ellipsis; white-space: nowrap; }
+.qc-preview th { position: sticky; top: 0; z-index: 1; background: #f0f3f5; text-align: left; }
+.qc-diagnostics { margin: 8px 0 0; padding-left: 20px; color: #666; font-size: 12px; }
+@media (max-width: 880px) {
+  .qc-workbook { grid-template-columns: 205px minmax(0,1fr); }
+  .qc-form, .qc-checks, .qc-m-layout { grid-template-columns: 1fr; }
+}
