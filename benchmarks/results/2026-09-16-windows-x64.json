@@ -1,0 +1,1143 @@
+{
+  "schema_version": 1,
+  "project": "UniCell",
+  "measured_at_utc": "2026-09-15T23:02:50.938714+00:00",
+  "environment": {
+    "os": "Windows",
+    "os_release": "10",
+    "os_version": "10.0.19045",
+    "architecture": "AMD64",
+    "logical_cpus": 8,
+    "python": "3.13.11",
+    "rustc": "rustc 1.97.1 (8bab26f4f 2026-07-14)",
+    "source_commit": "51e007388d702f23290bb44df7270d164daa0e2d",
+    "binary": "opencell-server.exe",
+    "binary_bytes": 22524416,
+    "binary_sha256": "3e8a2d9ef56fd9aa8706844d62f1c6b9b741a898025f336b50101507a1b5e759",
+    "harness_sha256": "7e64e1aedbfa011a3bb8ce8e0cd85ef984808a0aff261b76ded7c4ce9865cea9",
+    "physical_cores": 4,
+    "cpu": "11th Gen Intel(R) Core(TM) i7-1165G7 @ 2.80GHz",
+    "ram_gib": 31.7,
+    "os_caption": "Microsoft Windows 10 专业版"
+  },
+  "build_profile": "cargo build --release --locked --manifest-path server/Cargo.toml; default opt-level=3; ironcalc and ironcalc_base opt-level=1",
+  "warmups_per_case": 2,
+  "samples_per_case": 7,
+  "p95_method": "nearest rank: sorted[ceil(0.95*n)-1]",
+  "concurrency": 1,
+  "cases": [
+    {
+      "operation": "import_csv_and_calculate",
+      "size": 100,
+      "samples_ms": [
+        4.2204,
+        4.3822,
+        4.373,
+        4.8325,
+        4.525,
+        17.866,
+        19.1899
+      ],
+      "median_ms": 4.525,
+      "p95_ms": 19.1899,
+      "min_ms": 4.2204,
+      "max_ms": 19.1899,
+      "validation": [
+        {
+          "rows": 100,
+          "cells": 1000,
+          "formulas": 200,
+          "formula_sample_rows": [
+            1,
+            50,
+            100
+          ],
+          "correct": true,
+          "input_bytes": 3768,
+          "input_sha256": "0856b52ac5c72b708e426f1b510ee00b09f1598f507ece42ae1912d120647a78"
+        },
+        {
+          "rows": 100,
+          "cells": 1000,
+          "formulas": 200,
+          "formula_sample_rows": [
+            1,
+            50,
+            100
+          ],
+          "correct": true,
+          "input_bytes": 3768,
+          "input_sha256": "0856b52ac5c72b708e426f1b510ee00b09f1598f507ece42ae1912d120647a78"
+        },
+        {
+          "rows": 100,
+          "cells": 1000,
+          "formulas": 200,
+          "formula_sample_rows": [
+            1,
+            50,
+            100
+          ],
+          "correct": true,
+          "input_bytes": 3768,
+          "input_sha256": "0856b52ac5c72b708e426f1b510ee00b09f1598f507ece42ae1912d120647a78"
+        },
+        {
+          "rows": 100,
+          "cells": 1000,
+          "formulas": 200,
+          "formula_sample_rows": [
+            1,
+            50,
+            100
+          ],
+          "correct": true,
+          "input_bytes": 3768,
+          "input_sha256": "0856b52ac5c72b708e426f1b510ee00b09f1598f507ece42ae1912d120647a78"
+        },
+        {
+          "rows": 100,
+          "cells": 1000,
+          "formulas": 200,
+          "formula_sample_rows": [
+            1,
+            50,
+            100
+          ],
+          "correct": true,
+          "input_bytes": 3768,
+          "input_sha256": "0856b52ac5c72b708e426f1b510ee00b09f1598f507ece42ae1912d120647a78"
+        },
+        {
+          "rows": 100,
+          "cells": 1000,
+          "formulas": 200,
+          "formula_sample_rows": [
+            1,
+            50,
+            100
+          ],
+          "correct": true,
+          "input_bytes": 3768,
+          "input_sha256": "0856b52ac5c72b708e426f1b510ee00b09f1598f507ece42ae1912d120647a78"
+        },
+        {
+          "rows": 100,
+          "cells": 1000,
+          "formulas": 200,
+          "formula_sample_rows": [
+            1,
+            50,
+            100
+          ],
+          "correct": true,
+          "input_bytes": 3768,
+          "input_sha256": "0856b52ac5c72b708e426f1b510ee00b09f1598f507ece42ae1912d120647a78"
+        }
+      ]
+    },
+    {
+      "operation": "export_xlsx",
+      "size": 100,
+      "samples_ms": [
+        29.3429,
+        27.676,
+        27.0061,
+        5.8814,
+        5.4696,
+        28.1998,
+        5.6578
+      ],
+      "median_ms": 27.0061,
+      "p95_ms": 29.3429,
+      "min_ms": 5.4696,
+      "max_ms": 29.3429,
+      "validation": [
+        {
+          "bytes": 10900,
+          "sha256": "323eb0a91356caed71fbea76487aaa45f60f4955b57b678fdb8be8446944bb71",
+          "all_cell_and_formula_counts_checked": true
+        },
+        {
+          "bytes": 10900,
+          "sha256": "323eb0a91356caed71fbea76487aaa45f60f4955b57b678fdb8be8446944bb71",
+          "all_cell_and_formula_counts_checked": true
+        },
+        {
+          "bytes": 10900,
+          "sha256": "323eb0a91356caed71fbea76487aaa45f60f4955b57b678fdb8be8446944bb71",
+          "all_cell_and_formula_counts_checked": true
+        },
+        {
+          "bytes": 10900,
+          "sha256": "323eb0a91356caed71fbea76487aaa45f60f4955b57b678fdb8be8446944bb71",
+          "all_cell_and_formula_counts_checked": true
+        },
+        {
+          "bytes": 10900,
+          "sha256": "323eb0a91356caed71fbea76487aaa45f60f4955b57b678fdb8be8446944bb71",
+          "all_cell_and_formula_counts_checked": true
+        },
+        {
+          "bytes": 10900,
+          "sha256": "323eb0a91356caed71fbea76487aaa45f60f4955b57b678fdb8be8446944bb71",
+          "all_cell_and_formula_counts_checked": true
+        },
+        {
+          "bytes": 10900,
+          "sha256": "323eb0a91356caed71fbea76487aaa45f60f4955b57b678fdb8be8446944bb71",
+          "all_cell_and_formula_counts_checked": true
+        }
+      ]
+    },
+    {
+      "operation": "import_xlsx_and_calculate",
+      "size": 100,
+      "samples_ms": [
+        6.9244,
+        20.356,
+        18.5196,
+        7.5297,
+        21.5644,
+        6.9995,
+        11.8455
+      ],
+      "median_ms": 11.8455,
+      "p95_ms": 21.5644,
+      "min_ms": 6.9244,
+      "max_ms": 21.5644,
+      "validation": [
+        {
+          "rows": 100,
+          "cells": 1000,
+          "formulas": 200,
+          "formula_sample_rows": [
+            1,
+            50,
+            100
+          ],
+          "correct": true,
+          "input_bytes": 10900,
+          "input_sha256": "323eb0a91356caed71fbea76487aaa45f60f4955b57b678fdb8be8446944bb71"
+        },
+        {
+          "rows": 100,
+          "cells": 1000,
+          "formulas": 200,
+          "formula_sample_rows": [
+            1,
+            50,
+            100
+          ],
+          "correct": true,
+          "input_bytes": 10900,
+          "input_sha256": "323eb0a91356caed71fbea76487aaa45f60f4955b57b678fdb8be8446944bb71"
+        },
+        {
+          "rows": 100,
+          "cells": 1000,
+          "formulas": 200,
+          "formula_sample_rows": [
+            1,
+            50,
+            100
+          ],
+          "correct": true,
+          "input_bytes": 10900,
+          "input_sha256": "323eb0a91356caed71fbea76487aaa45f60f4955b57b678fdb8be8446944bb71"
+        },
+        {
+          "rows": 100,
+          "cells": 1000,
+          "formulas": 200,
+          "formula_sample_rows": [
+            1,
+            50,
+            100
+          ],
+          "correct": true,
+          "input_bytes": 10900,
+          "input_sha256": "323eb0a91356caed71fbea76487aaa45f60f4955b57b678fdb8be8446944bb71"
+        },
+        {
+          "rows": 100,
+          "cells": 1000,
+          "formulas": 200,
+          "formula_sample_rows": [
+            1,
+            50,
+            100
+          ],
+          "correct": true,
+          "input_bytes": 10900,
+          "input_sha256": "323eb0a91356caed71fbea76487aaa45f60f4955b57b678fdb8be8446944bb71"
+        },
+        {
+          "rows": 100,
+          "cells": 1000,
+          "formulas": 200,
+          "formula_sample_rows": [
+            1,
+            50,
+            100
+          ],
+          "correct": true,
+          "input_bytes": 10900,
+          "input_sha256": "323eb0a91356caed71fbea76487aaa45f60f4955b57b678fdb8be8446944bb71"
+        },
+        {
+          "rows": 100,
+          "cells": 1000,
+          "formulas": 200,
+          "formula_sample_rows": [
+            1,
+            50,
+            100
+          ],
+          "correct": true,
+          "input_bytes": 10900,
+          "input_sha256": "323eb0a91356caed71fbea76487aaa45f60f4955b57b678fdb8be8446944bb71"
+        }
+      ]
+    },
+    {
+      "operation": "batch_edit_and_recalculate",
+      "size": 100,
+      "samples_ms": [
+        16.7617,
+        16.5978,
+        16.4243,
+        16.4196,
+        1.7246,
+        1.9843,
+        2.0039
+      ],
+      "median_ms": 16.4196,
+      "p95_ms": 16.7617,
+      "min_ms": 1.7246,
+      "max_ms": 16.7617,
+      "validation": [
+        {
+          "rows": 100,
+          "cells": 1000,
+          "formulas": 200,
+          "formula_sample_rows": [
+            1,
+            50,
+            100
+          ],
+          "correct": true
+        },
+        {
+          "rows": 100,
+          "cells": 1000,
+          "formulas": 200,
+          "formula_sample_rows": [
+            1,
+            50,
+            100
+          ],
+          "correct": true
+        },
+        {
+          "rows": 100,
+          "cells": 1000,
+          "formulas": 200,
+          "formula_sample_rows": [
+            1,
+            50,
+            100
+          ],
+          "correct": true
+        },
+        {
+          "rows": 100,
+          "cells": 1000,
+          "formulas": 200,
+          "formula_sample_rows": [
+            1,
+            50,
+            100
+          ],
+          "correct": true
+        },
+        {
+          "rows": 100,
+          "cells": 1000,
+          "formulas": 200,
+          "formula_sample_rows": [
+            1,
+            50,
+            100
+          ],
+          "correct": true
+        },
+        {
+          "rows": 100,
+          "cells": 1000,
+          "formulas": 200,
+          "formula_sample_rows": [
+            1,
+            50,
+            100
+          ],
+          "correct": true
+        },
+        {
+          "rows": 100,
+          "cells": 1000,
+          "formulas": 200,
+          "formula_sample_rows": [
+            1,
+            50,
+            100
+          ],
+          "correct": true
+        }
+      ]
+    },
+    {
+      "operation": "import_csv_and_calculate",
+      "size": 1000,
+      "samples_ms": [
+        79.1034,
+        71.0656,
+        74.4098,
+        71.8053,
+        56.7797,
+        58.1663,
+        68.3612
+      ],
+      "median_ms": 71.0656,
+      "p95_ms": 79.1034,
+      "min_ms": 56.7797,
+      "max_ms": 79.1034,
+      "validation": [
+        {
+          "rows": 1000,
+          "cells": 10000,
+          "formulas": 2000,
+          "formula_sample_rows": [
+            1,
+            500,
+            1000
+          ],
+          "correct": true,
+          "input_bytes": 41572,
+          "input_sha256": "930ad532ebaf6c3e996af6f5e7f039c04f021aba675640c62f3a3c4a5bac0df9"
+        },
+        {
+          "rows": 1000,
+          "cells": 10000,
+          "formulas": 2000,
+          "formula_sample_rows": [
+            1,
+            500,
+            1000
+          ],
+          "correct": true,
+          "input_bytes": 41572,
+          "input_sha256": "930ad532ebaf6c3e996af6f5e7f039c04f021aba675640c62f3a3c4a5bac0df9"
+        },
+        {
+          "rows": 1000,
+          "cells": 10000,
+          "formulas": 2000,
+          "formula_sample_rows": [
+            1,
+            500,
+            1000
+          ],
+          "correct": true,
+          "input_bytes": 41572,
+          "input_sha256": "930ad532ebaf6c3e996af6f5e7f039c04f021aba675640c62f3a3c4a5bac0df9"
+        },
+        {
+          "rows": 1000,
+          "cells": 10000,
+          "formulas": 2000,
+          "formula_sample_rows": [
+            1,
+            500,
+            1000
+          ],
+          "correct": true,
+          "input_bytes": 41572,
+          "input_sha256": "930ad532ebaf6c3e996af6f5e7f039c04f021aba675640c62f3a3c4a5bac0df9"
+        },
+        {
+          "rows": 1000,
+          "cells": 10000,
+          "formulas": 2000,
+          "formula_sample_rows": [
+            1,
+            500,
+            1000
+          ],
+          "correct": true,
+          "input_bytes": 41572,
+          "input_sha256": "930ad532ebaf6c3e996af6f5e7f039c04f021aba675640c62f3a3c4a5bac0df9"
+        },
+        {
+          "rows": 1000,
+          "cells": 10000,
+          "formulas": 2000,
+          "formula_sample_rows": [
+            1,
+            500,
+            1000
+          ],
+          "correct": true,
+          "input_bytes": 41572,
+          "input_sha256": "930ad532ebaf6c3e996af6f5e7f039c04f021aba675640c62f3a3c4a5bac0df9"
+        },
+        {
+          "rows": 1000,
+          "cells": 10000,
+          "formulas": 2000,
+          "formula_sample_rows": [
+            1,
+            500,
+            1000
+          ],
+          "correct": true,
+          "input_bytes": 41572,
+          "input_sha256": "930ad532ebaf6c3e996af6f5e7f039c04f021aba675640c62f3a3c4a5bac0df9"
+        }
+      ]
+    },
+    {
+      "operation": "export_xlsx",
+      "size": 1000,
+      "samples_ms": [
+        42.1361,
+        41.6117,
+        40.4342,
+        45.6051,
+        23.874,
+        48.3282,
+        25.5139
+      ],
+      "median_ms": 41.6117,
+      "p95_ms": 48.3282,
+      "min_ms": 23.874,
+      "max_ms": 48.3282,
+      "validation": [
+        {
+          "bytes": 53023,
+          "sha256": "8439900fa48dd39a94d7dcd9491805f5799f53bcfedd341d79e6d12cc8f1a909",
+          "all_cell_and_formula_counts_checked": true
+        },
+        {
+          "bytes": 53023,
+          "sha256": "8439900fa48dd39a94d7dcd9491805f5799f53bcfedd341d79e6d12cc8f1a909",
+          "all_cell_and_formula_counts_checked": true
+        },
+        {
+          "bytes": 53023,
+          "sha256": "8439900fa48dd39a94d7dcd9491805f5799f53bcfedd341d79e6d12cc8f1a909",
+          "all_cell_and_formula_counts_checked": true
+        },
+        {
+          "bytes": 53023,
+          "sha256": "8439900fa48dd39a94d7dcd9491805f5799f53bcfedd341d79e6d12cc8f1a909",
+          "all_cell_and_formula_counts_checked": true
+        },
+        {
+          "bytes": 53023,
+          "sha256": "8439900fa48dd39a94d7dcd9491805f5799f53bcfedd341d79e6d12cc8f1a909",
+          "all_cell_and_formula_counts_checked": true
+        },
+        {
+          "bytes": 53023,
+          "sha256": "8439900fa48dd39a94d7dcd9491805f5799f53bcfedd341d79e6d12cc8f1a909",
+          "all_cell_and_formula_counts_checked": true
+        },
+        {
+          "bytes": 53023,
+          "sha256": "8439900fa48dd39a94d7dcd9491805f5799f53bcfedd341d79e6d12cc8f1a909",
+          "all_cell_and_formula_counts_checked": true
+        }
+      ]
+    },
+    {
+      "operation": "import_xlsx_and_calculate",
+      "size": 1000,
+      "samples_ms": [
+        69.9732,
+        69.3114,
+        68.4996,
+        86.6088,
+        83.8222,
+        82.7918,
+        85.0772
+      ],
+      "median_ms": 82.7918,
+      "p95_ms": 86.6088,
+      "min_ms": 68.4996,
+      "max_ms": 86.6088,
+      "validation": [
+        {
+          "rows": 1000,
+          "cells": 10000,
+          "formulas": 2000,
+          "formula_sample_rows": [
+            1,
+            500,
+            1000
+          ],
+          "correct": true,
+          "input_bytes": 53023,
+          "input_sha256": "8439900fa48dd39a94d7dcd9491805f5799f53bcfedd341d79e6d12cc8f1a909"
+        },
+        {
+          "rows": 1000,
+          "cells": 10000,
+          "formulas": 2000,
+          "formula_sample_rows": [
+            1,
+            500,
+            1000
+          ],
+          "correct": true,
+          "input_bytes": 53023,
+          "input_sha256": "8439900fa48dd39a94d7dcd9491805f5799f53bcfedd341d79e6d12cc8f1a909"
+        },
+        {
+          "rows": 1000,
+          "cells": 10000,
+          "formulas": 2000,
+          "formula_sample_rows": [
+            1,
+            500,
+            1000
+          ],
+          "correct": true,
+          "input_bytes": 53023,
+          "input_sha256": "8439900fa48dd39a94d7dcd9491805f5799f53bcfedd341d79e6d12cc8f1a909"
+        },
+        {
+          "rows": 1000,
+          "cells": 10000,
+          "formulas": 2000,
+          "formula_sample_rows": [
+            1,
+            500,
+            1000
+          ],
+          "correct": true,
+          "input_bytes": 53023,
+          "input_sha256": "8439900fa48dd39a94d7dcd9491805f5799f53bcfedd341d79e6d12cc8f1a909"
+        },
+        {
+          "rows": 1000,
+          "cells": 10000,
+          "formulas": 2000,
+          "formula_sample_rows": [
+            1,
+            500,
+            1000
+          ],
+          "correct": true,
+          "input_bytes": 53023,
+          "input_sha256": "8439900fa48dd39a94d7dcd9491805f5799f53bcfedd341d79e6d12cc8f1a909"
+        },
+        {
+          "rows": 1000,
+          "cells": 10000,
+          "formulas": 2000,
+          "formula_sample_rows": [
+            1,
+            500,
+            1000
+          ],
+          "correct": true,
+          "input_bytes": 53023,
+          "input_sha256": "8439900fa48dd39a94d7dcd9491805f5799f53bcfedd341d79e6d12cc8f1a909"
+        },
+        {
+          "rows": 1000,
+          "cells": 10000,
+          "formulas": 2000,
+          "formula_sample_rows": [
+            1,
+            500,
+            1000
+          ],
+          "correct": true,
+          "input_bytes": 53023,
+          "input_sha256": "8439900fa48dd39a94d7dcd9491805f5799f53bcfedd341d79e6d12cc8f1a909"
+        }
+      ]
+    },
+    {
+      "operation": "batch_edit_and_recalculate",
+      "size": 1000,
+      "samples_ms": [
+        32.9312,
+        33.7014,
+        48.0976,
+        41.8889,
+        35.2046,
+        33.8201,
+        32.9595
+      ],
+      "median_ms": 33.8201,
+      "p95_ms": 48.0976,
+      "min_ms": 32.9312,
+      "max_ms": 48.0976,
+      "validation": [
+        {
+          "rows": 1000,
+          "cells": 10000,
+          "formulas": 2000,
+          "formula_sample_rows": [
+            1,
+            500,
+            1000
+          ],
+          "correct": true
+        },
+        {
+          "rows": 1000,
+          "cells": 10000,
+          "formulas": 2000,
+          "formula_sample_rows": [
+            1,
+            500,
+            1000
+          ],
+          "correct": true
+        },
+        {
+          "rows": 1000,
+          "cells": 10000,
+          "formulas": 2000,
+          "formula_sample_rows": [
+            1,
+            500,
+            1000
+          ],
+          "correct": true
+        },
+        {
+          "rows": 1000,
+          "cells": 10000,
+          "formulas": 2000,
+          "formula_sample_rows": [
+            1,
+            500,
+            1000
+          ],
+          "correct": true
+        },
+        {
+          "rows": 1000,
+          "cells": 10000,
+          "formulas": 2000,
+          "formula_sample_rows": [
+            1,
+            500,
+            1000
+          ],
+          "correct": true
+        },
+        {
+          "rows": 1000,
+          "cells": 10000,
+          "formulas": 2000,
+          "formula_sample_rows": [
+            1,
+            500,
+            1000
+          ],
+          "correct": true
+        },
+        {
+          "rows": 1000,
+          "cells": 10000,
+          "formulas": 2000,
+          "formula_sample_rows": [
+            1,
+            500,
+            1000
+          ],
+          "correct": true
+        }
+      ]
+    },
+    {
+      "operation": "import_csv_and_calculate",
+      "size": 10000,
+      "samples_ms": [
+        20217.2681,
+        23482.7091,
+        18802.4905,
+        20403.0163,
+        16164.8002,
+        18248.5483,
+        28130.8428
+      ],
+      "median_ms": 20217.2681,
+      "p95_ms": 28130.8428,
+      "min_ms": 16164.8002,
+      "max_ms": 28130.8428,
+      "validation": [
+        {
+          "rows": 10000,
+          "cells": 100000,
+          "formulas": 20000,
+          "formula_sample_rows": [
+            1,
+            5000,
+            10000
+          ],
+          "correct": true,
+          "input_bytes": 455576,
+          "input_sha256": "56bebce52f62218fbe7dfebe71c42127fa3163376f2f000fb3df2e0dff80bcd6"
+        },
+        {
+          "rows": 10000,
+          "cells": 100000,
+          "formulas": 20000,
+          "formula_sample_rows": [
+            1,
+            5000,
+            10000
+          ],
+          "correct": true,
+          "input_bytes": 455576,
+          "input_sha256": "56bebce52f62218fbe7dfebe71c42127fa3163376f2f000fb3df2e0dff80bcd6"
+        },
+        {
+          "rows": 10000,
+          "cells": 100000,
+          "formulas": 20000,
+          "formula_sample_rows": [
+            1,
+            5000,
+            10000
+          ],
+          "correct": true,
+          "input_bytes": 455576,
+          "input_sha256": "56bebce52f62218fbe7dfebe71c42127fa3163376f2f000fb3df2e0dff80bcd6"
+        },
+        {
+          "rows": 10000,
+          "cells": 100000,
+          "formulas": 20000,
+          "formula_sample_rows": [
+            1,
+            5000,
+            10000
+          ],
+          "correct": true,
+          "input_bytes": 455576,
+          "input_sha256": "56bebce52f62218fbe7dfebe71c42127fa3163376f2f000fb3df2e0dff80bcd6"
+        },
+        {
+          "rows": 10000,
+          "cells": 100000,
+          "formulas": 20000,
+          "formula_sample_rows": [
+            1,
+            5000,
+            10000
+          ],
+          "correct": true,
+          "input_bytes": 455576,
+          "input_sha256": "56bebce52f62218fbe7dfebe71c42127fa3163376f2f000fb3df2e0dff80bcd6"
+        },
+        {
+          "rows": 10000,
+          "cells": 100000,
+          "formulas": 20000,
+          "formula_sample_rows": [
+            1,
+            5000,
+            10000
+          ],
+          "correct": true,
+          "input_bytes": 455576,
+          "input_sha256": "56bebce52f62218fbe7dfebe71c42127fa3163376f2f000fb3df2e0dff80bcd6"
+        },
+        {
+          "rows": 10000,
+          "cells": 100000,
+          "formulas": 20000,
+          "formula_sample_rows": [
+            1,
+            5000,
+            10000
+          ],
+          "correct": true,
+          "input_bytes": 455576,
+          "input_sha256": "56bebce52f62218fbe7dfebe71c42127fa3163376f2f000fb3df2e0dff80bcd6"
+        }
+      ]
+    },
+    {
+      "operation": "export_xlsx",
+      "size": 10000,
+      "samples_ms": [
+        340.4322,
+        452.7336,
+        468.2469,
+        460.642,
+        341.5154,
+        362.4097,
+        557.9532
+      ],
+      "median_ms": 452.7336,
+      "p95_ms": 557.9532,
+      "min_ms": 340.4322,
+      "max_ms": 557.9532,
+      "validation": [
+        {
+          "bytes": 483785,
+          "sha256": "a3a5d8bf66f398af66ebd678beb8146875ab804aef2c0fb83381e7b2f2edc037",
+          "all_cell_and_formula_counts_checked": true
+        },
+        {
+          "bytes": 483785,
+          "sha256": "a3a5d8bf66f398af66ebd678beb8146875ab804aef2c0fb83381e7b2f2edc037",
+          "all_cell_and_formula_counts_checked": true
+        },
+        {
+          "bytes": 483786,
+          "sha256": "49c600f6867e3484bee5772121aa855e2807385ba4b26841fde7e0130c26694f",
+          "all_cell_and_formula_counts_checked": true
+        },
+        {
+          "bytes": 483786,
+          "sha256": "793731ff1994eb823c423af388e863c49a220a6dfa3f0079ef0bdbb33a9e99b0",
+          "all_cell_and_formula_counts_checked": true
+        },
+        {
+          "bytes": 483786,
+          "sha256": "62bed493cd1ca9941dea5d37355d7fa610a29ab07bcc895ef6c105515f4a90c0",
+          "all_cell_and_formula_counts_checked": true
+        },
+        {
+          "bytes": 483786,
+          "sha256": "0d514d734fa23b846196feaba275ec529d41c70881df959eb4d5d29acafb023a",
+          "all_cell_and_formula_counts_checked": true
+        },
+        {
+          "bytes": 483786,
+          "sha256": "0d514d734fa23b846196feaba275ec529d41c70881df959eb4d5d29acafb023a",
+          "all_cell_and_formula_counts_checked": true
+        }
+      ]
+    },
+    {
+      "operation": "import_xlsx_and_calculate",
+      "size": 10000,
+      "samples_ms": [
+        24569.0972,
+        21512.3008,
+        17865.2243,
+        21737.6319,
+        17071.3101,
+        16085.9222,
+        16825.9519
+      ],
+      "median_ms": 17865.2243,
+      "p95_ms": 24569.0972,
+      "min_ms": 16085.9222,
+      "max_ms": 24569.0972,
+      "validation": [
+        {
+          "rows": 10000,
+          "cells": 100000,
+          "formulas": 20000,
+          "formula_sample_rows": [
+            1,
+            5000,
+            10000
+          ],
+          "correct": true,
+          "input_bytes": 483785,
+          "input_sha256": "a3a5d8bf66f398af66ebd678beb8146875ab804aef2c0fb83381e7b2f2edc037"
+        },
+        {
+          "rows": 10000,
+          "cells": 100000,
+          "formulas": 20000,
+          "formula_sample_rows": [
+            1,
+            5000,
+            10000
+          ],
+          "correct": true,
+          "input_bytes": 483785,
+          "input_sha256": "a3a5d8bf66f398af66ebd678beb8146875ab804aef2c0fb83381e7b2f2edc037"
+        },
+        {
+          "rows": 10000,
+          "cells": 100000,
+          "formulas": 20000,
+          "formula_sample_rows": [
+            1,
+            5000,
+            10000
+          ],
+          "correct": true,
+          "input_bytes": 483786,
+          "input_sha256": "49c600f6867e3484bee5772121aa855e2807385ba4b26841fde7e0130c26694f"
+        },
+        {
+          "rows": 10000,
+          "cells": 100000,
+          "formulas": 20000,
+          "formula_sample_rows": [
+            1,
+            5000,
+            10000
+          ],
+          "correct": true,
+          "input_bytes": 483786,
+          "input_sha256": "793731ff1994eb823c423af388e863c49a220a6dfa3f0079ef0bdbb33a9e99b0"
+        },
+        {
+          "rows": 10000,
+          "cells": 100000,
+          "formulas": 20000,
+          "formula_sample_rows": [
+            1,
+            5000,
+            10000
+          ],
+          "correct": true,
+          "input_bytes": 483786,
+          "input_sha256": "62bed493cd1ca9941dea5d37355d7fa610a29ab07bcc895ef6c105515f4a90c0"
+        },
+        {
+          "rows": 10000,
+          "cells": 100000,
+          "formulas": 20000,
+          "formula_sample_rows": [
+            1,
+            5000,
+            10000
+          ],
+          "correct": true,
+          "input_bytes": 483786,
+          "input_sha256": "0d514d734fa23b846196feaba275ec529d41c70881df959eb4d5d29acafb023a"
+        },
+        {
+          "rows": 10000,
+          "cells": 100000,
+          "formulas": 20000,
+          "formula_sample_rows": [
+            1,
+            5000,
+            10000
+          ],
+          "correct": true,
+          "input_bytes": 483786,
+          "input_sha256": "0d514d734fa23b846196feaba275ec529d41c70881df959eb4d5d29acafb023a"
+        }
+      ]
+    },
+    {
+      "operation": "batch_edit_and_recalculate",
+      "size": 10000,
+      "samples_ms": [
+        17864.5686,
+        21926.212,
+        23292.3773,
+        16900.8972,
+        20878.387,
+        19081.3805,
+        18365.2727
+      ],
+      "median_ms": 19081.3805,
+      "p95_ms": 23292.3773,
+      "min_ms": 16900.8972,
+      "max_ms": 23292.3773,
+      "validation": [
+        {
+          "rows": 10000,
+          "cells": 100000,
+          "formulas": 20000,
+          "formula_sample_rows": [
+            1,
+            5000,
+            10000
+          ],
+          "correct": true
+        },
+        {
+          "rows": 10000,
+          "cells": 100000,
+          "formulas": 20000,
+          "formula_sample_rows": [
+            1,
+            5000,
+            10000
+          ],
+          "correct": true
+        },
+        {
+          "rows": 10000,
+          "cells": 100000,
+          "formulas": 20000,
+          "formula_sample_rows": [
+            1,
+            5000,
+            10000
+          ],
+          "correct": true
+        },
+        {
+          "rows": 10000,
+          "cells": 100000,
+          "formulas": 20000,
+          "formula_sample_rows": [
+            1,
+            5000,
+            10000
+          ],
+          "correct": true
+        },
+        {
+          "rows": 10000,
+          "cells": 100000,
+          "formulas": 20000,
+          "formula_sample_rows": [
+            1,
+            5000,
+            10000
+          ],
+          "correct": true
+        },
+        {
+          "rows": 10000,
+          "cells": 100000,
+          "formulas": 20000,
+          "formula_sample_rows": [
+            1,
+            5000,
+            10000
+          ],
+          "correct": true
+        },
+        {
+          "rows": 10000,
+          "cells": 100000,
+          "formulas": 20000,
+          "formula_sample_rows": [
+            1,
+            5000,
+            10000
+          ],
+          "correct": true
+        }
+      ]
+    }
+  ],
+  "workload": "10 columns: 8 numeric inputs + SUM(A:H) + dependent multiplication; one sheet, no styles/images/charts",
+  "timing_boundary": "Local HTTP transfer, operation, calculation and full response read; input generation and correctness checks excluded; no browser rendering",
+  "calculation_mode": "automatic; batch edits change every row and include history bookkeeping"
+}

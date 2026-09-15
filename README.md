@@ -1,70 +1,84 @@
-# UniCell · 本机基础版
+# UniCell
 
-**这是纯国产 app project。** UniCell 是 OmniDoc 旗下自主开发的电子表格应用项目，提供中文界面、本机编辑与格式转换。
+**English** | [简体中文](README.zh-CN.md)
 
-[English](README.en.md) · [OmniDoc 主站](https://omnidoc.top) · [项目合集](https://github.com/OmniDocX/omnidoc) · [UniPPT](https://github.com/OmniDocX/UniPPT) · [vecmeta](https://github.com/OmniDocX/vecmeta)
+[OmniDoc](https://omnidoc.top/) · [GitHub](https://github.com/OmniDocX)
 
-应用采用 Rust 引擎与浏览器界面，表格在本机服务中计算；首次构建完成后，基础编辑无需账号和联网。项目使用 IronCalc、KaTeX 等第三方开源组件，来源与独立许可证详见 [第三方声明](THIRD_PARTY_NOTICES.md)。国产应用项目定位不表示所有第三方依赖均为国产。
+**A local spreadsheet application with a Rust calculation engine and browser interface.**
 
-## 快速开始
+UniCell is an independently developed Chinese application project from OmniDoc. It provides local spreadsheet editing, formulas and document conversion. Its implementation incorporates third-party open-source components, including IronCalc and KaTeX; their origins and licenses are documented in [third-party notices](THIRD_PARTY_NOTICES.md).
 
-准备 Rust 稳定工具链（支持 edition 2024）和现代浏览器。Windows 安装 Visual Studio C++ 构建工具；Linux 安装 C/C++ 编译器、pkg-config 与 OpenSSL 开发包。首次构建需要下载 Cargo 依赖。
+## Project positioning
+
+**Microsoft 365 (Office 365) and WPS Office** are the reference office products. Our ambition is to build the most complete China-developed office platform with publicly available source and reproducible engineering evidence. This is a development objective; see the [product comparison](docs/COMPARISON.md) for current scope and evidence. First-party code uses a non-commercial source license, detailed below.
+
+## Performance
+
+<!-- BENCHMARK:START -->
+Measured on 2026-09-16: Windows 10, Intel Core i7-1165G7, 31.70 GiB RAM. Each case uses two warmups and seven measured iterations, executed sequentially.
+
+| Operation | Size (rows) | Median ms | P95 ms |
+| --- | ---: | ---: | ---: |
+| CSV import + calculation | 10,000 | 20217.27 | 28130.84 |
+| XLSX export | 10,000 | 452.73 | 557.95 |
+| XLSX import + calculation | 10,000 | 17865.22 | 24569.10 |
+| Batch edit + recalculation | 10,000 | 19081.38 | 23292.38 |
+
+[All sizes, methodology and limitations](benchmarks/README.md) · [Raw observations](benchmarks/results/2026-09-16-windows-x64.json)
+
+Timings exclude browser rendering. Office 365 and WPS were not timed in this campaign.
+<!-- BENCHMARK:END -->
+
+## Capabilities
+
+| Area | Public local edition |
+| --- | --- |
+| Workbook editing | Cells, formulas, rich text, number formats, borders, merges, rows/columns, multiple sheets, undo/redo |
+| Data operations | Sorting, filtering, frozen panes, conditional formatting, validation and supported what-if analysis |
+| Document formats | XLSX/XLSM, CSV, UniDoc UDOC and UniCell HTML import/export |
+| Embedded content | Images, SVG, charts and supported Office objects; preservation of selected complex OOXML parts |
+| Local workflows | File saving, recent files, browser recovery copies, print preview and pagination |
+| Automation | Optional configurable U AI and five local MCP tools |
+
+The public edition excludes R2, cloud storage, shared links, collaborative editing, centralized accounts and hosted quotas.
+
+## Quick start
+
+Install a stable Rust toolchain with edition 2024 support and a modern browser. Windows builds require Visual Studio C++ Build Tools; Linux builds require a C/C++ toolchain, pkg-config and OpenSSL development libraries. Initial dependency downloads require network access.
 
 ```sh
 git clone https://github.com/OmniDocX/unicell.git
 cd unicell
-cargo run --locked --manifest-path server/Cargo.toml
+cargo run --release --locked --manifest-path server/Cargo.toml
 ```
 
-打开 **http://127.0.0.1:8143**。端口冲突时：
+Open **http://127.0.0.1:8143**. Append `-- --port=8145` to select a different port. Run from the repository root or `server/`. The executable is `opencell-server`; the required `vecmeta/` source is included.
 
-```sh
-cargo run --locked --manifest-path server/Cargo.toml -- --port=8145
-```
+## Data lifecycle and compatibility
 
-请在仓库根目录或 `server/` 内运行。`vecmeta/` 已随源码提供，无需下载其他私有仓库。发布构建加 `--release`；程序名称为 `opencell-server`。
+The service binds to `127.0.0.1` and separates workbooks by browser session. Active workbooks are primarily held in server memory. Restarting the server or leaving a session idle for eight hours invalidates that state. Save working documents explicitly; browser recovery copies are supplementary.
 
-## 保留的基础功能
+CSV exports display values from the current sheet, without retaining workbook formulas or formatting. XLSM macro parts may be retained, but VBA is not executed. Pivots, external connections, SmartArt and other advanced objects have preservation/editing limits. See [features and limitations](docs/FEATURES.md).
 
-- 单元格与公式编辑、数字格式、富文本、边框、合并、行列操作、多工作表、剪贴板、撤销和重做。
-- 筛选、排序、冻结窗格、条件格式、数据验证、工作表保护与假设分析。
-- XLSX / XLSM、CSV、UniDoc `.udoc`、UniCell HTML 导入导出，打印预览与分页。
-- 图片、SVG、图表及部分原生 Office 对象编辑；导入文件中的复杂 OOXML 部件尽量保留。
-- 本机文件保存、最近文件、浏览器恢复副本；可选 U AI 和 5 个本机 MCP 工具。
+## Optional integrations
 
-公开基础版已移除 R2、云存储、共享链接、多人协作、统一账号和托管服务额度系统。完整服务版能力不包含在此仓库中。
+| Integration | Configuration |
+| --- | --- |
+| U AI | Copy `.env.example` to `.env.local`; configure a Chat Completions-compatible provider. See [local AI](docs/LOCAL_AI.md). Selected context is sent to that provider. |
+| Office mathematics | `python -m pip install -r tools/requirements-math.txt`; select Python with `UNICELL_PYTHON`. Ordinary cell formulas do not require Python. |
+| HTML object screenshots | Install Chrome, Edge or Chromium; optionally set `UNICELL_CHROMIUM`. |
+| Fonts | System fonts by default; optional licensed local fonts. See [font loading](FONT_LOADING.md). |
+| MCP | Local HTTP POST at `/mcp`, using a Cookie workbook session; information, cell/range read, cell write and range formatting. See [MCP](docs/MCP.md). |
 
-## 数据与兼容性
+## Architecture and verification
 
-服务只绑定 `127.0.0.1`，浏览器会话的工作簿相互隔离。工作簿主要保存在服务内存中，重启或会话闲置 8 小时后会失效。请主动使用保存或另存为；浏览器恢复副本不能代替正式文件备份。
-
-CSV 只导出当前工作表显示值，不能保留样式和公式结构。XLSM 可以携带宏部件，应用不执行 VBA。透视表、连接、SmartArt 等存在“原样保留、部分编辑”的边界，不能据此推断 Excel 全功能等价。详见 [功能与限制](docs/FEATURES.md)。
-
-## 可选配置
-
-### U AI
-
-复制 `.env.example` 为 `.env.local`，填写自己的兼容 Chat Completions 服务、模型和密钥。仅检查 UniCell 自身配置，不读取相邻产品的凭据。未配置时，基础编辑照常工作。
-
-使用 U AI 时，选择的工作簿上下文和问题会发送给你配置的模型服务，调用费用由该服务计收。详见 [本机 AI](docs/LOCAL_AI.md)。
-
-### 数学公式与截图
-
-普通单元格公式计算不需要 Python。把 LaTeX 转为 Office 数学对象时可安装：
-
-```sh
-python -m pip install -r tools/requirements-math.txt
-```
-
-服务通过 `UNICELL_PYTHON` 或系统 Python 调用转换器。HTML 对象截图需要本机 Chrome、Edge 或 Chromium；可用 `UNICELL_CHROMIUM` 指定可执行文件。
-
-字体使用系统字体，可选自备且有使用权的字体库，见 [字体加载](FONT_LOADING.md)。
-
-### 本机 MCP
-
-启动后访问 `/docs/mcp-protocol.html`。`/mcp` 使用本机 HTTP POST 与 Cookie 工作簿会话，提供工作簿信息、读取单元格/区域、写入单元格、区域格式设置。详见 [MCP 接入](docs/MCP.md)。
-
-## 开发与检查
+| Directory | Responsibility |
+| --- | --- |
+| `server` | Rust local service and patched IronCalc integration |
+| `web` | Browser spreadsheet interface |
+| `vecmeta` | Included SVG/EMF conversion components |
+| `tools` | Math helpers, HTTP smoke tests and publication checks |
+| `benchmarks` | Generated workbooks, performance harness and measured results |
 
 ```sh
 cargo test --locked --manifest-path server/Cargo.toml
@@ -72,10 +86,25 @@ python -m unittest discover -s tools -p "test_*.py"
 python tools/check_public_boundary.py
 ```
 
-运行服务后，执行 `python tools/local_smoke.py --url http://127.0.0.1:8143` 进行隔离会话的导入、编辑、导出、MCP 和边界检查。Node.js 可用于 `node --check web/app.js`；浏览器扩展自测入口是 `/?test=auto`。
+With the service running, execute `python tools/local_smoke.py --url http://127.0.0.1:8143`. The browser self-test entry is `/?test=auto`. The publication check reads indexed files. [Commercial licensing](docs/COMMERCIAL_LICENSE.md) · [License scope](docs/LICENSING.md).
 
-## 许可证与商业授权
+## OmniDoc ecosystem
 
-自有代码采用 [OmniDoc 非商业源码许可 1.0](LICENSE)：符合条款的非商业使用免费；商业使用（包括中国境内企业）需事先取得书面授权。这是源码可见许可，不是 OSI 批准的开源许可。第三方组件保持各自授权。
+| Project | Purpose | Website / source |
+| --- | --- | --- |
+| OmniDoc | Main product portal | [omnidoc.top](https://omnidoc.top/) |
+| UniDoc | Document authoring | [app.unidoc.top](https://app.unidoc.top/) |
+| UniPPT | Presentations | [Editor](https://unippt.unidoc.top/) · [Source](https://github.com/OmniDocX/UniPPT) |
+| UniCell | Spreadsheets | [Editor](https://unicell.unidoc.top/) · [Source](https://github.com/OmniDocX/unicell) |
+| UniMail | Email, calendar and contacts | [unimail.omnidoc.top](https://unimail.omnidoc.top/) |
+| UniPic | Image and vector editing | [pic.unidoc.top](https://pic.unidoc.top/) |
+| vecmeta | SVG ↔ EMF conversion | [Source](https://github.com/OmniDocX/vecmeta) |
+| Source collections | Pinned copies of the three published components | [omnidoc](https://github.com/OmniDocX/omnidoc) · [omnidocx](https://github.com/OmniDocX/omnidocx) |
 
-商业咨询：**cc@omnidoc.top**，微信 **13184071590**，通常 48 小时内答复。见 [商业授权](docs/COMMERCIAL_LICENSE.md) 和 [许可范围](docs/LICENSING.md)。
+Hosted products may offer features beyond the public local editions. Their availability and terms are defined by each product.
+
+## License and commercial use
+
+First-party code and documentation use the [OmniDoc Non-Commercial Source License 1.0](LICENSE). Qualifying non-commercial use is free. Commercial use, including internal business use by companies in China or elsewhere, requires prior written permission. This is a source-available license, not an OSI-approved open-source license. Third-party components retain their own terms; prior lawful grants for earlier releases remain unaffected.
+
+Commercial contact: [cc@omnidoc.top](mailto:cc@omnidoc.top) · WeChat: **13184071590**. Complete applications receive a response within 48 hours; submission or silence does not grant permission.
