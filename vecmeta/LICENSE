@@ -1,126 +1,73 @@
-OmniDoc Non-Commercial Source License 1.0
-OmniDoc 非商业源码许可协议 1.0
+# PolyForm Noncommercial License 1.0.0
 
-Copyright (c) 2026 OmniDoc project copyright holders.
-版权所有 (c) 2026 OmniDoc 项目相关著作权人。
+<https://polyformproject.org/licenses/noncommercial/1.0.0>
 
-中文正文
-========
+## Acceptance
 
-1. 适用范围
-本协议适用于本次发布中明确附有本协议、由相关 OmniDoc 项目著作权人
-（“许可方”）有权许可的源码及配套文档（“软件”）。独立第三方组件、
-测试素材、字体及其他另附许可的内容不受本协议替代。您对软件的使用、
-复制、修改或分发，须具有本协议或其他有效许可授予的相应权利。
+In order to get any license under these terms, you must agree to them as both strict obligations and conditions to all your licenses.
 
-2. 非商业许可
-遵守本协议的前提下，许可方授予您全球范围内、非独占、免许可费的权利，
-仅为非商业目的使用、复制、研究、修改及分发本软件的源码或构建产物。
-非商业目的包括个人学习、非商业教学和非商业科研，且不得服务于商业
-获利、企业经营、客户交付或其他商业优势。可收取不超过实际介质及传输
-成本的分发费用，但不得据此销售软件或提供商业服务。
+## Copyright License
 
-3. 商业用途需另行许可
-任何商业用途必须事先取得许可方另行出具的书面商业许可，包括将软件
-用于企业内部业务、商业产品或服务、SaaS、托管平台、付费或商业 API、
-客户项目交付、商业集成、转售、OEM、以广告或其他商业收益支持的服务。
-是否修改源码、是否私有部署、是否直接收取软件费用，不决定其是否属于
-商业用途。中国公司以及其他国家或地区的公司和营利主体适用相同要求；
-非商业教育或研究机构从事上述商业活动时亦须另行许可。
+The licensor grants you a copyright license for the software to do everything you might do with the software that would otherwise infringe the licensor's copyright in it for any permitted purpose.  However, you may only distribute the software according to [Distribution License](#distribution-license) and make changes or new works based on the software according to [Changes and New Works License](#changes-and-new-works-license).
 
-4. 分发条件
-非商业分发须保留著作权、许可及第三方声明，随副本提供本协议，并清楚
-标明修改及修改者。不得将许可方软件重新声明为 MIT、GPL 或其他与本协议
-冲突的许可。接收者仅获得许可方按本协议授予的相应权利；分发者不得
-代表许可方授予商业权利。第三方组件继续按其自身有效许可分发。
+## Distribution License
 
-5. 商标及输出
-本协议不授予 OmniDoc 或其他商标、标志的使用许可，也不允许暗示官方
-背书。许可方不因软件被用于处理文稿、图片或其他输入而主张其输出内容
-的著作权；使用软件从事商业活动仍适用第 3 条。
+The licensor grants you an additional copyright license to distribute copies of the software.  Your license to distribute covers distributing the software with changes and new works permitted by [Changes and New Works License](#changes-and-new-works-license).
 
-6. 既有许可
-本协议不追溯撤销、缩减或替代您对先前版本已经合法取得的 MIT、GPL
-或其他许可。相同代码如另有有效许可，您可依该许可行使相应权利。
-本协议亦不覆盖许可方无权重新许可的第三方材料。
+## Notices
 
-7. 终止
-违反本协议时，本协议项下权利终止，您须停止未获其他有效许可覆盖的
-使用与分发。恢复本协议项下权利须经许可方书面确认。本条不影响您
-根据独立第三方许可或既有版本许可已经取得的权利。
+You must ensure that anyone who gets a copy of any part of the software from you also gets a copy of these terms or the URL for them above, as well as copies of any plain-text lines beginning with `Required Notice:` that the licensor provided with the software.  For example:
 
-8. 免责声明
-在适用法律允许的最大范围内，软件按“现状”提供，不附带任何明示或
-默示保证，包括适销性、特定用途适用性及不侵权保证。许可方不对因软件
-或本协议引起的损失、损害或责任承担责任，但适用法律不允许排除的除外。
+> Required Notice: Copyright Yoyodyne, Inc. (http://example.com)
 
-9. 商业申请与文本
-商业联系邮箱：cc@omnidoc.top
-微信：添加手机号 13184071590
-审核时限及材料要求见随附商业授权说明。提出申请、支付意向或许可方
-未回复均不构成商业许可；商业权利以双方实际确认的书面许可为准。
-本协议是源码可见的非商业许可，不是 OSI 开源许可。下列英文为译文，
-文本发生冲突时，以中文正文为准。
+## Changes and New Works License
 
-English translation
-===================
+The licensor grants you an additional copyright license to make changes and new works based on the software for any permitted purpose.
 
-1. Scope. This license covers source and documentation expressly supplied under
-it in this release and licensable by the relevant OmniDoc project copyright
-holders (the "Licensor"). Separately licensed third-party components, fixtures,
-fonts, and other materials retain their own terms. Use, copying, modification,
-or distribution requires the relevant rights under this or another valid license.
+## Patent License
 
-2. Non-commercial grant. Subject to these terms, the Licensor grants worldwide,
-non-exclusive, royalty-free permission to use, copy, study, modify, and distribute
-the Software in source or built form solely for non-commercial purposes.
-Examples include personal learning, non-commercial teaching, and non-commercial
-research, without commercial gain, business operation, customer delivery, or
-commercial advantage. Distribution charges may recover actual media and
-transmission costs only, not sell the Software or commercial services.
+The licensor grants you a patent license for the software that covers patent claims the licensor can license, or becomes able to license, that you would infringe by using the software.
 
-3. Commercial use. Prior separate written permission from the Licensor is
-required for commercial use, including internal business operations, commercial
-products or services, SaaS, hosting platforms, paid or commercial APIs, customer
-delivery, commercial integration, resale, OEM, and advertising- or revenue-
-supported services. Modifications, private deployment, or the absence of a direct
-software fee do not determine whether use is commercial. Companies and for-profit
-entities in China and all other countries or regions are subject to the same
-requirement. Educational or research institutions also need permission for such
-commercial activities.
+## Noncommercial Purposes
 
-4. Redistribution. Non-commercial redistribution must retain copyright, license,
-and third-party notices, include this license, and identify modifications and
-their authors. Do not relicense the Licensor's Software under MIT, GPL, or other
-conflicting terms. Recipients obtain the rights granted by the Licensor under
-this license; distributors cannot grant commercial rights on its behalf.
-Third-party components remain subject to their own valid licenses.
+Any noncommercial purpose is a permitted purpose.
 
-5. Trademarks and output. No trademark rights or official endorsement are granted.
-The Licensor does not claim copyright in documents, images, or other output
-merely because the Software processed the input. Commercial operation of the
-Software remains subject to section 3.
+## Personal Uses
 
-6. Earlier grants. This license does not retroactively revoke, restrict, or
-replace rights already lawfully granted under MIT, GPL, or other licenses for
-earlier versions. Where the same code is available under another valid license,
-you may exercise those rights. This license does not cover third-party material
-the Licensor has no right to relicense.
+Personal use for research, experiment, and testing for the benefit of public knowledge, personal study, private entertainment, hobby projects, amateur pursuits, or religious observance, without any anticipated commercial application, is use for a permitted purpose.
 
-7. Termination. Breach terminates rights under this license. Stop use and
-distribution not covered by another valid license. Reinstatement requires the
-Licensor's written confirmation. Independent third-party and earlier-version
-rights are unaffected.
+## Noncommercial Organizations
 
-8. Disclaimer. To the maximum extent permitted by applicable law, the Software is
-provided "AS IS", without express or implied warranties, including merchantability,
-fitness for a particular purpose, or non-infringement. The Licensor is not liable
-for loss, damage, or liability arising from the Software or this license, except
-where such exclusion is not permitted by applicable law.
+Use by any charitable organization, educational institution, public research organization, public safety or health organization, environmental protection organization, or government institution is use for a permitted purpose regardless of the source of funding or obligations resulting from the funding.
 
-9. Applications and language. Contact cc@omnidoc.top or add mobile number
-13184071590 on WeChat. Application requirements and review times are in the
-commercial licensing guide. An application, intent to pay, or lack of response
-does not grant commercial rights; the actual written agreement controls them.
-This is a source-available non-commercial license, not an OSI open-source license.
-The Chinese text prevails in case of a conflict with this translation.
+## Fair Use
+
+You may have "fair use" rights for the software under the law. These terms do not limit them.
+
+## No Other Rights
+
+These terms do not allow you to sublicense or transfer any of your licenses to anyone else, or prevent the licensor from granting licenses to anyone else.  These terms do not imply any other licenses.
+
+## Patent Defense
+
+If you make any written claim that the software infringes or contributes to infringement of any patent, your patent license for the software granted under these terms ends immediately. If your company makes such a claim, your patent license ends immediately for work on behalf of your company.
+
+## Violations
+
+The first time you are notified in writing that you have violated any of these terms, or done anything with the software not covered by your licenses, your licenses can nonetheless continue if you come into full compliance with these terms, and take practical steps to correct past violations, within 32 days of receiving notice.  Otherwise, all your licenses end immediately.
+
+## No Liability
+
+***As far as the law allows, the software comes as is, without any warranty or condition, and the licensor will not be liable to you for any damages arising out of these terms or the use or nature of the software, under any kind of legal claim.***
+
+## Definitions
+
+The **licensor** is the individual or entity offering these terms, and the **software** is the software the licensor makes available under these terms.
+
+**You** refers to the individual or entity agreeing to these terms.
+
+**Your company** is any legal entity, sole proprietorship, or other kind of organization that you work for, plus all organizations that have control over, are under the control of, or are under common control with that organization.  **Control** means ownership of substantially all the assets of an entity, or the power to direct its management and policies by vote, contract, or otherwise.  Control can be direct or indirect.
+
+**Your licenses** are all the licenses granted to you for the software under these terms.
+
+**Use** means anything you do with the software requiring one of your licenses.

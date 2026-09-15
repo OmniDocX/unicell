@@ -15,18 +15,18 @@ UniCell is an independently developed Chinese application project from OmniDoc. 
 ## Performance
 
 <!-- BENCHMARK:START -->
-Measured on 2026-09-16: Windows 10, Intel Core i7-1165G7, 31.70 GiB RAM. Each case uses two warmups and seven measured iterations, executed sequentially.
+The bounded-range SUM optimization is included in the public local edition. On the same machine and the same 10,000-row CSV (100,000 cells, 20,000 formulas), median import plus calculation improved from **20.217 s to 0.661 s, approximately 30.6× faster**. Each case uses two warmups and seven measured iterations.
 
 | Operation | Size (rows) | Median ms | P95 ms |
 | --- | ---: | ---: | ---: |
-| CSV import + calculation | 10,000 | 20217.27 | 28130.84 |
-| XLSX export | 10,000 | 452.73 | 557.95 |
-| XLSX import + calculation | 10,000 | 17865.22 | 24569.10 |
-| Batch edit + recalculation | 10,000 | 19081.38 | 23292.38 |
+| CSV import + calculation | 10,000 | 660.92 | 707.79 |
+| XLSX export | 10,000 | 562.30 | 618.65 |
+| XLSX import + calculation | 10,000 | 1144.12 | 1248.97 |
+| Batch edit + recalculation | 10,000 | 120.68 | 135.50 |
 
-[All sizes, methodology and limitations](benchmarks/README.md) · [Raw observations](benchmarks/results/2026-09-16-windows-x64.json)
+[Full report, baseline and earlier approximately 55× experiment](benchmarks/README.md) · [JSON](benchmarks/results/2026-09-16-sum-optimized-windows-x64.json)
 
-Timings exclude browser rendering. Office 365 and WPS were not timed in this campaign.
+All 20,000 formulas and results passed validation on every new iteration. This is a before/after observation for one synthetic workload, not a speed comparison with Excel, Office 365 or WPS or an overall spreadsheet speedup. Background load and temperature on the shared workstation were not fully controlled. Unoptimized paths such as XLSX export may be slower; all results are retained. This repository update does not deploy the hosted service.
 <!-- BENCHMARK:END -->
 
 ## Capabilities
@@ -105,6 +105,8 @@ Hosted products may offer features beyond the public local editions. Their avail
 
 ## License and commercial use
 
-First-party code and documentation use the [OmniDoc Non-Commercial Source License 1.0](LICENSE). Qualifying non-commercial use is free. Commercial use, including internal business use by companies in China or elsewhere, requires prior written permission. This is a source-available license, not an OSI-approved open-source license. Third-party components retain their own terms; prior lawful grants for earlier releases remain unaffected.
+First-party code and documentation use the unmodified [PolyForm Noncommercial 1.0.0](LICENSE). Uses permitted by that license are free. Commercial uses outside its permitted purposes require a separate paid commercial license: contact us to apply, agree on fees and obtain written authorization before use. The standard license's institutional permissions remain fully applicable. This is a source-available license, not an OSI-approved open-source license. Third-party terms and valid earlier grants remain unchanged.
+
+[License scope and permitted uses](docs/LICENSING.md) · [Commercial licensing and application](docs/COMMERCIAL_LICENSE.md).
 
 Commercial contact: [cc@omnidoc.top](mailto:cc@omnidoc.top) · WeChat: **13184071590**. Complete applications receive a response within 48 hours; submission or silence does not grant permission.

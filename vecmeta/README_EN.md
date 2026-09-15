@@ -135,12 +135,6 @@ Deployment, account, and licensing requirements are defined in each product's of
 
 ## License and commercial use
 
-**Free for non-commercial use; prior written permission is required for commercial use.** Current first-party source uses the [OmniDoc Non-Commercial Source License 1.0](LICENSE), a source-available license—not MIT/GPL or an OSI open-source license.
+First-party code and documentation use the unmodified [PolyForm Noncommercial 1.0.0](LICENSE). Uses permitted by that license are free. Commercial uses outside its permitted purposes require a separate paid commercial license: contact us to apply, agree on fees and obtain written authorization before use. The standard license's institutional permissions remain fully applicable. This is a source-available license, not an OSI-approved open-source license. Third-party terms and valid earlier grants remain unchanged.
 
-Companies in China and all other countries or regions require permission for internal business use, commercial products, SaaS/APIs, customer delivery, and commercial integration.
-
-- Email: [cc@omnidoc.top](mailto:cc@omnidoc.top)
-- WeChat: add mobile number **13184071590**
-- Complete applications are reviewed and answered within **48 hours**; review is not automatic approval, and silence grants no permission.
-
-See [commercial applications](docs/COMMERCIAL_LICENSE.md). Earlier lawful grants are not revoked; third-party dependencies and test assets retain their own licenses.
+[License scope and permitted uses](docs/LICENSING.md) · [Commercial licensing and application](docs/COMMERCIAL_LICENSE.md).

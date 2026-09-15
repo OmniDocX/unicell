@@ -19,7 +19,7 @@ Reviewed on 2026-09-16. Competitor columns summarize official product documentat
 | Product breadth | Two local editors plus a vector conversion component in this collection | Broader productivity application and service portfolio | Integrated document, spreadsheet, presentation and PDF tools |
 | Distribution | Buildable Rust/JavaScript source, local services and CLI | Official application and service distribution | Official application downloads and online products |
 | Cloud collaboration | Not included in the public local edition | Cloud file access and collaboration via Microsoft 365 services | Cloud document collaboration in the WPS ecosystem |
-| Source and modification | Source supplied under the repository license; commercial use requires written permission | Governed by Microsoft's product terms | Governed by WPS product terms |
+| Source and modification | Source supplied under the repository license; commercial uses outside its permitted purposes require a separate paid written license | Governed by Microsoft's product terms | Governed by WPS product terms |
 | Extensibility in this release | Local MCP in UniPPT/UniCell; Rust APIs and CLI in vecmeta | Outside this comparison's verified scope | Outside this comparison's verified scope |
 | Performance evidence | Reproducible local benchmarks and raw observations in each repository | Not measured in this benchmark campaign | Not measured in this benchmark campaign |
 
@@ -33,6 +33,6 @@ For a controlled comparison, use identical authorized fixtures and hardware; rec
 
 ## Licensing terminology
 
-Current OmniDoc first-party code uses the OmniDoc Non-Commercial Source License 1.0. It is **source-available, not OSI-approved open source**. Third-party packages retain their own licenses. References to source publication or project ambitions do not alter these terms.
+Current OmniDoc first-party code uses the PolyForm Noncommercial 1.0.0. It is **source-available, not OSI-approved open source**. Third-party packages retain their own licenses. References to source publication or project ambitions do not alter these terms.
 
 Microsoft 365, Office, PowerPoint, Excel and WPS are names or trademarks of their respective owners. This is an independent project comparison.

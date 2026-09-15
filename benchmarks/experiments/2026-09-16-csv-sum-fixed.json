@@ -1,0 +1,66 @@
+{
+  "binary_sha256": "d43cdbbdaa34027d0cfa58e8bb9c45f552d161d157573fdca93aa09dd263aee8",
+  "binary": "opencell-server.exe",
+  "warmups": 2,
+  "samples": 7,
+  "timing_boundary": "Local HTTP request through full response; excludes fixture generation and validation; no browser rendering",
+  "workload": "10 columns: 8 numeric inputs, SUM(A:H), dependent multiplication",
+  "cases": [
+    {
+      "rows": 1000,
+      "cells": 10000,
+      "formulas": 2000,
+      "csv_sha256": "930ad532ebaf6c3e996af6f5e7f039c04f021aba675640c62f3a3c4a5bac0df9",
+      "import_ms": [
+        37.51729999203235,
+        34.87659999518655,
+        41.55160000664182,
+        43.5064000193961,
+        36.958000011509284,
+        43.5826999892015,
+        50.003600015770644
+      ],
+      "import_median_ms": 41.55160000664182,
+      "export_ms": [
+        43.788300012238324,
+        29.210899985628203,
+        37.13050001533702,
+        28.109899983974174,
+        26.986400014720857,
+        34.82320002513006,
+        50.436300021829084
+      ],
+      "export_median_ms": 34.82320002513006,
+      "validation": "Every formula and its cached numeric result checked on every run"
+    },
+    {
+      "rows": 10000,
+      "cells": 100000,
+      "formulas": 20000,
+      "csv_sha256": "56bebce52f62218fbe7dfebe71c42127fa3163376f2f000fb3df2e0dff80bcd6",
+      "import_ms": [
+        378.6569000221789,
+        358.5687000013422,
+        412.5186000019312,
+        367.74549999972805,
+        361.1864999984391,
+        362.92970000067726,
+        493.4645999746863
+      ],
+      "import_median_ms": 367.74549999972805,
+      "export_ms": [
+        257.03490001615137,
+        276.3394999783486,
+        299.10069998004474,
+        257.28150000213645,
+        265.63359997817315,
+        260.3376000188291,
+        689.7965999960434
+      ],
+      "export_median_ms": 265.63359997817315,
+      "validation": "Every formula and its cached numeric result checked on every run"
+    }
+  ],
+  "publication_note": "Earlier full-application optimization experiment, not a build of this public local edition. Only the absolute binary path was redacted; original timing/validation fields are retained.",
+  "original_record_sha256": "e4efcfde6f2f091b6477d24bba96eddacdfe1867fbaea7ea3b1a4533f9cfbd16"
+}
