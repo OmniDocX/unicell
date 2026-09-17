@@ -406,6 +406,23 @@ async function runSelfTest() {
     }
     ok(`T32 数字格式电池 ${fmtCases.length - fmtFails.length}/${fmtCases.length}`, fmtFails.length === 0, fmtFails.join(' | '));
 
+    // T32a-c 人民币格式必须使用产品真实 UI 选项值，避免测试绕过错误映射。
+    const currencyOptions = Array.from($('sel-numfmt').options);
+    const cnyFormat = currencyOptions.find((option) => option.textContent.includes('¥'))?.value;
+    const usdFormat = currencyOptions.find((option) => option.textContent.includes('$'))?.value;
+    await apiPost('/api/input', { sheet: S.sheet, row: 53, col: 10, value: '15' });
+    await apiPost('/api/style', { sheet: S.sheet, r0: 53, c0: 10, r1: 53, c1: 10, path: 'num_fmt', value: cnyFormat });
+    const cnyNumber = await api(`/api/cell?sheet=${S.sheet}&row=53&col=10`);
+    ok('T32a 人民币数字格式', cnyNumber.value === 15 && cnyNumber.formatted === '¥15.00', JSON.stringify(cnyNumber));
+    await apiPost('/api/input', { sheet: S.sheet, row: 53, col: 10, value: '=10+5' });
+    const cnyFormula = await api(`/api/cell?sheet=${S.sheet}&row=53&col=10`);
+    ok('T32b 人民币公式格式', cnyFormula.content === '=10+5' && cnyFormula.value === 15 && cnyFormula.formatted === '¥15.00', JSON.stringify(cnyFormula));
+    await apiPost('/api/input', { sheet: S.sheet, row: 53, col: 10, value: '15' });
+    await apiPost('/api/style', { sheet: S.sheet, r0: 53, c0: 10, r1: 53, c1: 10, path: 'num_fmt', value: usdFormat });
+    const usdNumber = await api(`/api/cell?sheet=${S.sheet}&row=53&col=10`);
+    ok('T32c 美元格式对照', usdNumber.value === 15 && usdNumber.formatted === '$15.00', JSON.stringify(usdNumber));
+    await apiPost('/api/style', { sheet: S.sheet, r0: 53, c0: 10, r1: 53, c1: 10, path: 'num_fmt', value: 'general' });
+
     // T33 引擎 Rust 重构：数组参数不�?NIMPL（vendor 分支 cast/TEXTJOIN/CONCAT 补丁�?
     const arrCases = [
       ['=TEXTJOIN(",",TRUE,UNIQUE(G1:G5))', 'a,b,c'],

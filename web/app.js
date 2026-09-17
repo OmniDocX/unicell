@@ -2747,7 +2747,7 @@ async function openCellFormatDialog() {
             <option value="0">数值 1235</option>
             <option value="#,##0.00">数值 1,234.56</option>
             <option value="$#,##0.00">货币 $1,234.56</option>
-            <option value="¥#,##0.00">货币 ¥1,234.56</option>
+            <option value="&quot;¥&quot;#,##0.00">货币 ¥1,234.56</option>
             <option value="0.00%">百分比 12.34%</option>
             <option value="0.00E+00">科学计数</option>
             <option value="yyyy-mm-dd">日期 2026-07-31</option>
