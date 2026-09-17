@@ -12,7 +12,7 @@ The project's ambition is to build the most complete China-developed office plat
 
 Reviewed on 2026-09-16. Competitor columns summarize official product documentation, not hands-on compatibility or performance tests. Availability varies by edition, platform, region and subscription.
 
-| Dimension | OmniDoc public edition | Microsoft 365 (Office 365) | WPS Office |
+| Dimension | OmniDoc public local edition | Microsoft 365 (Office 365) | WPS Office |
 | --- | --- | --- | --- |
 | Presentation workflow | UniPPT: browser editor, native PPTX objects, local import/export | PowerPoint desktop and web applications | WPS presentation applications |
 | Spreadsheet workflow | UniCell: browser editor, formulas, XLSX/CSV import/export | Excel desktop and web applications | WPS spreadsheet applications |

@@ -6,7 +6,7 @@ UniCell 自有应用代码采用顶层 [PolyForm Noncommercial 1.0.0](../LICENSE
 
 `vecmeta/` 为本仓库随附的公开版本，适用其 [LICENSE](../vecmeta/LICENSE) 和 [来源说明](../vecmeta/LICENSE-NOTICE.md)。维护者确认其自研权属，历史授权说明保留在该目录；已依法取得的旧版本许可不被撤回。
 
-“纯国产 app project”描述应用项目的开发定位，第三方计算引擎、字体与库均单独署名。本次发布以独立源码快照建立历史，不包含开发者文档、用户工作簿、账户凭据或服务部署状态。
+“纯国产应用项目”描述应用项目的开发定位，第三方计算引擎、字体与库均单独署名。本次发布以独立源码快照建立历史，不包含开发者文档、用户工作簿、账户凭据或服务部署状态。
 
 First-party UniCell code is source-available under the PolyForm Noncommercial 1.0.0, not OSI-approved open source. Third-party licenses and valid earlier grants remain independent and unchanged.
 
