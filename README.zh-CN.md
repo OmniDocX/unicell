@@ -8,6 +8,8 @@
 
 [English](README.md) | **简体中文**
 
+**UniCell 公网地址：[https://unicell.unidoc.top/](https://unicell.unidoc.top/)**
+
 [官网](https://omnidoc.top/) · [在线体验](https://unicell.unidoc.top/) · [快速开始](#快速开始) · [文档](#文档) · [测评](benchmarks/README.zh-CN.md)
 
 [![CI](https://github.com/OmniDocX/unicell/actions/workflows/ci.yml/badge.svg)](https://github.com/OmniDocX/unicell/actions/workflows/ci.yml)

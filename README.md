@@ -8,6 +8,8 @@
 
 **English** | [简体中文](README.zh-CN.md)
 
+**UniCell online: [https://unicell.unidoc.top/](https://unicell.unidoc.top/)**
+
 [Website](https://omnidoc.top/) · [Live app](https://unicell.unidoc.top/) · [Quick start](#quick-start) · [Documentation](#documentation) · [Benchmarks](benchmarks/README.md)
 
 [![CI](https://github.com/OmniDocX/unicell/actions/workflows/ci.yml/badge.svg)](https://github.com/OmniDocX/unicell/actions/workflows/ci.yml)
