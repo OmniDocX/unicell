@@ -1,6 +1,6 @@
 # 功能与限制
 
-[项目概述](../README.zh-CN.md) · [同类产品对照](COMPARISON.zh-CN.md)
+[项目概述](../README.zh-CN.md) · [同类产品对照](COMPARISON.zh-CN.md) · [对标 Excel 的功能差距清单](../EXCEL_GAPS.zh-CN.md)
 
 | 能力 | 公开本机版范围 |
 | --- | --- |

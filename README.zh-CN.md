@@ -58,7 +58,7 @@ cargo run --release --locked --manifest-path server/Cargo.toml
 
 服务绑定 `127.0.0.1`，通过浏览器会话隔离工作簿。活动工作簿主要存放在服务内存中，服务重启或会话闲置 8 小时后，该状态会失效。应主动保存正式文件，浏览器恢复副本仅作为补充。
 
-CSV 导出当前工作表显示值，不保留工作簿公式结构和格式。XLSM 宏部件可按支持范围保留，但不执行 VBA。数据透视表、外部数据连接、SmartArt 等高级对象存在保留和编辑边界，见 [功能与限制](docs/FEATURES.md)。
+CSV 导出当前工作表显示值，不保留工作簿公式结构和格式。XLSM 宏部件可按支持范围保留，但不执行 VBA。数据透视表、外部数据连接、SmartArt 等高级对象存在保留和编辑边界，见 [功能与限制](docs/FEATURES.md)。与 Excel 原生功能的逐项差距见 [对标 Excel 的功能差距清单](EXCEL_GAPS.zh-CN.md)。
 
 ## 可选接入
 

@@ -58,7 +58,7 @@ Open **http://127.0.0.1:8143**. Append `-- --port=8145` to select a different po
 
 The service binds to `127.0.0.1` and separates workbooks by browser session. Active workbooks are primarily held in server memory. Restarting the server or leaving a session idle for eight hours invalidates that state. Save working documents explicitly; browser recovery copies are supplementary.
 
-CSV exports display values from the current sheet, without retaining workbook formulas or formatting. XLSM macro parts may be retained, but VBA is not executed. PivotTables, external data connections, SmartArt and other advanced objects have preservation/editing limits. See [features and limitations](docs/FEATURES.md).
+CSV exports display values from the current sheet, without retaining workbook formulas or formatting. XLSM macro parts may be retained, but VBA is not executed. PivotTables, external data connections, SmartArt and other advanced objects have preservation/editing limits. See [features and limitations](docs/FEATURES.md). For an itemized comparison with native Excel features, see [feature gaps relative to Excel](EXCEL_GAPS.md).
 
 ## Optional integrations
 
