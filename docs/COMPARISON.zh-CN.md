@@ -25,6 +25,19 @@
 
 资料来源：[Microsoft 应用与服务](https://www.microsoft.com/en-us/microsoft-365/products-apps-services)、[Microsoft 协作文档](https://support.microsoft.com/en-us/office/collab-files/collaborate-from-anywhere-using-microsoft-365)、[WPS Office 产品页](https://www.wps.com/office/)、[WPS 公司与协作功能说明](https://www.wps.com/blog/what-is-kingsoft/)。
 
+
+## 公开办公项目参照
+
+2026-09-18 核对官方仓库：
+
+| 项目 | 主要交付形态 | 与本项目的关系 |
+| --- | --- | --- |
+| [ONLYOFFICE Docs](https://github.com/ONLYOFFICE/DocumentServer) | 可部署的在线办公编辑器，包含实时协作能力 | 办公编辑器与文档集成的参照项目 |
+| [Univer](https://github.com/dream-num/univer) | 以插件、渲染和公式引擎组成的可嵌入办公 SDK | 开发接入与模块化文档能力的参照项目 |
+| OmniDoc | UniPPT / UniCell 本机应用与 vecmeta Rust 组件 | 当前公开源码围绕本机编辑、格式处理与 AI / MCP 工作流 |
+
+三者交付形态与许可不同；这张表说明项目定位，不推导功能完整性或速度排名。ONLYOFFICE、Univer 的开源与商业版本范围以其官方文档为准。
+
 ## 测评结论的适用范围
 
 已公布的数据反映本次发行程序在一台机器上的运行表现，不能据此推导相对 Microsoft 365 或 WPS 的速度优势。文件生成、公式计算、渲染和交互编辑是不同操作，应分别测量。vecmeta 的 CLI 耗时不能直接与办公应用的文档打开耗时比较。

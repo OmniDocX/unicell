@@ -25,6 +25,19 @@ Reviewed on 2026-09-16. Competitor columns summarize official product documentat
 
 Sources: [Microsoft applications and services](https://www.microsoft.com/en-us/microsoft-365/products-apps-services), [Microsoft collaboration documentation](https://support.microsoft.com/en-us/office/collab-files/collaborate-from-anywhere-using-microsoft-365), [WPS Office product page](https://www.wps.com/office/), [WPS company and collaboration overview](https://www.wps.com/blog/what-is-kingsoft/).
 
+
+## Public office reference projects
+
+Official repositories reviewed on 2026-09-18:
+
+| Project | Primary delivery | Relationship to this project |
+| --- | --- | --- |
+| [ONLYOFFICE Docs](https://github.com/ONLYOFFICE/DocumentServer) | Deployable online office editors with real-time collaboration | A reference for office editing and document integration |
+| [Univer](https://github.com/dream-num/univer) | An embeddable office SDK with plugins, rendering and formula engines | A reference for developer integration and modular document capabilities |
+| OmniDoc | UniPPT / UniCell local applications and the vecmeta Rust component | Current public source focuses on local editing, format processing and AI / MCP workflows |
+
+Delivery models and licensing differ. This table describes positioning, not a completeness or speed ranking. Consult the official ONLYOFFICE and Univer documentation for open-source and commercial edition scope.
+
 ## Interpreting the benchmarks
 
 Published measurements characterize the included release binaries on one machine. They do not establish a speed advantage over Microsoft 365 or WPS Office. File generation, formula calculation, rendering and interactive editing are different operations and must be reported separately. vecmeta's CLI timings cannot be compared directly with an office application's document-open time.

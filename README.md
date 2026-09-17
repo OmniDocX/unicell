@@ -1,50 +1,41 @@
+<div align="center">
+
+<img src="web/unicell-logo.svg" width="72" height="72" alt="UniCell" />
+
 # UniCell
+
+**A local spreadsheet for organizing data, calculating formulas and delivering workbooks.**
 
 **English** | [简体中文](README.zh-CN.md)
 
-[OmniDoc](https://omnidoc.top/) · [GitHub](https://github.com/OmniDocX)
+[Website](https://omnidoc.top/) · [Live app](https://unicell.unidoc.top/) · [Quick start](#quick-start) · [Documentation](#documentation) · [Benchmarks](benchmarks/README.md)
 
-**A local spreadsheet application with a Rust calculation engine and browser interface.**
+[![CI](https://github.com/OmniDocX/unicell/actions/workflows/ci.yml/badge.svg)](https://github.com/OmniDocX/unicell/actions/workflows/ci.yml)
+[![License: PolyForm Noncommercial](https://img.shields.io/badge/license-PolyForm_Noncommercial-315EFB?style=flat-square)](LICENSE)
+[![GitHub issues](https://img.shields.io/github/issues/OmniDocX/unicell?style=flat-square)](https://github.com/OmniDocX/unicell/issues)
 
-UniCell is an independently developed Chinese application project from OmniDoc. It provides local spreadsheet editing, formulas and document conversion. Its implementation incorporates third-party open-source components, including IronCalc and KaTeX; their origins and licenses are documented in [third-party notices](THIRD_PARTY_NOTICES.md).
+</div>
 
-## Project positioning
+UniCell brings familiar spreadsheet workflows to your browser: open Excel or CSV files, edit multiple sheets, calculate formulas, format data and save workbooks locally. A Rust service handles calculation and file processing, while the browser provides editing, data tools and print controls.
 
-**Microsoft 365 (Office 365) and WPS Office** are the reference office products. Our ambition is to build the most complete China-developed office platform with publicly available source and reproducible engineering evidence. This is a development objective; see the [product comparison](docs/COMPARISON.md) for current scope and evidence. First-party code uses a non-commercial source license, detailed below.
+Developed in China as part of OmniDoc, with IronCalc for calculation and KaTeX for math typesetting. Third-party components are attributed independently.
 
-## Performance
+![UniCell spreadsheet editor](docs/images/editor.png)
 
-<!-- BENCHMARK:START -->
-The bounded-range SUM optimization is included in the public local edition. On the same machine and the same 10,000-row CSV (100,000 cells, 20,000 formulas), median import plus calculation improved from **20.217 s to 0.661 s, approximately 30.6× faster**. Each case uses two warmups and seven measured iterations.
+<sub>Actual public local edition with synthetic data, formulas, number formats and calculated totals.</sub>
 
-| Operation | Size (rows) | Median ms | P95 ms |
-| --- | ---: | ---: | ---: |
-| CSV import + calculation | 10,000 | 660.92 | 707.79 |
-| XLSX export | 10,000 | 562.30 | 618.65 |
-| XLSX import + calculation | 10,000 | 1144.12 | 1248.97 |
-| Batch edit + recalculation | 10,000 | 120.68 | 135.50 |
+## Highlights
 
-[Full report, baseline and earlier approximately 55× experiment](benchmarks/README.md) · [JSON](benchmarks/results/2026-09-16-sum-optimized-windows-x64.json)
-
-All 20,000 formulas and results passed validation on every new iteration. This is a before/after observation for one synthetic workload, not a speed comparison with Excel, Office 365 or WPS or an overall spreadsheet speedup. Background load and temperature on the shared workstation were not fully controlled. Unoptimized paths such as XLSX export may be slower; all results are retained. This repository update does not deploy the hosted service.
-<!-- BENCHMARK:END -->
-
-## Capabilities
-
-| Area | Public local edition |
-| --- | --- |
-| Workbook editing | Cells, formulas, rich text, number formats, borders, merges, rows/columns, multiple sheets, undo/redo |
-| Data operations | Sorting, filtering, frozen panes, conditional formatting, validation and supported what-if analysis |
-| Document formats | XLSX/XLSM, CSV, UniDoc UDOC and UniCell HTML import/export |
-| Embedded content | Images, SVG, charts and supported Office objects; preservation of selected complex OOXML parts |
-| Local workflows | File saving, recent files, browser recovery copies, print preview and pagination |
-| Automation | Optional configurable U AI and five local MCP tools |
-
-The public edition excludes R2, cloud storage, shared links, collaborative editing, centralized accounts and hosted quotas.
+- **Everyday editing** — Multiple sheets, cell and range operations, row/column sizing, merges, rich text, undo and redo.
+- **Formulas and recalculation** — IronCalc evaluates formula dependencies. Bounded SUM ranges are optimized, with reproducible benchmarks included.
+- **Data organization** — Sort, filter, freeze panes, apply conditional formatting and validation, and use supported what-if operations.
+- **File round trips** — Import and export XLSX/XLSM, CSV, UDOC and UniCell HTML for continued editing and local archiving.
+- **Visual content and print** — Work with images, SVG, charts and supported Office objects; configure pages and print through the browser.
+- **AI automation** — Configure U AI or use local MCP to read data, write formulas and format ranges.
 
 ## Quick start
 
-Install a stable Rust toolchain with edition 2024 support and a modern browser. Windows builds require Visual Studio C++ Build Tools; Linux builds require a C/C++ toolchain, pkg-config and OpenSSL development libraries. Initial dependency downloads require network access.
+Install Git, a stable Rust toolchain supporting edition 2024, and a modern browser:
 
 ```sh
 git clone https://github.com/OmniDocX/unicell.git
@@ -52,61 +43,76 @@ cd unicell
 cargo run --release --locked --manifest-path server/Cargo.toml
 ```
 
-Open **http://127.0.0.1:8143**. Append `-- --port=8145` to select a different port. Run from the repository root or `server/`. The executable is `opencell-server`; the required `vecmeta/` source is included.
+Open **http://127.0.0.1:8143**. Append `-- --port=8145` to use a different port. Run from the repository root or `server/`.
 
-## Data lifecycle and compatibility
+Windows requires Visual Studio C++ build tools. Linux requires a C/C++ toolchain, pkg-config and OpenSSL development packages.
 
-The service binds to `127.0.0.1` and separates workbooks by browser session. Active workbooks are primarily held in server memory. Restarting the server or leaving a session idle for eight hours invalidates that state. Save working documents explicitly; browser recovery copies are supplementary.
+## AI and developer integration
 
-CSV exports display values from the current sheet, without retaining workbook formulas or formatting. XLSM macro parts may be retained, but VBA is not executed. Pivots, external connections, SmartArt and other advanced objects have preservation/editing limits. See [features and limitations](docs/FEATURES.md).
+**U AI**: copy `.env.example` to `.env.local` and configure a Chat Completions-compatible provider. Basic editing works independently of AI; selected context is sent to the provider when AI is enabled. [Configuration](docs/LOCAL_AI.md).
 
-## Optional integrations
+**MCP**: the local `/mcp` endpoint exposes five tools within the current cookie-based workbook session. [Protocol and examples](docs/MCP.md).
 
-| Integration | Configuration |
+| Tool | Purpose |
 | --- | --- |
-| U AI | Copy `.env.example` to `.env.local`; configure a Chat Completions-compatible provider. See [local AI](docs/LOCAL_AI.md). Selected context is sent to that provider. |
-| Office mathematics | `python -m pip install -r tools/requirements-math.txt`; select Python with `UNICELL_PYTHON`. Ordinary cell formulas do not require Python. |
-| HTML object screenshots | Install Chrome, Edge or Chromium; optionally set `UNICELL_CHROMIUM`. |
-| Fonts | System fonts by default; optional licensed local fonts. See [font loading](FONT_LOADING.md). |
-| MCP | Local HTTP POST at `/mcp`, using a Cookie workbook session; information, cell/range read, cell write and range formatting. See [MCP](docs/MCP.md). |
+| `workbook_info` | Inspect the workbook and its sheets |
+| `read_cell` / `read_range` | Read a cell or range |
+| `write_cell` | Write values, text and formulas |
+| `format_range` | Apply range formatting |
 
-## Architecture and verification
+## Performance
 
-| Directory | Responsibility |
+<!-- BENCHMARK:START -->
+The bounded-range SUM optimization reduced median import plus calculation for a 10,000-row CSV from **20.217 s to 0.661 s — approximately 31× faster**. Every iteration checked all 20,000 formulas and results.
+
+| Operation | Workload | Median |
+| --- | --- | --- |
+| CSV import + calculation | 10,000 rows / 20,000 formulas | **660.92 ms** |
+| Batch edit + recalculation | 10,000 rows / 20,000 formulas | **120.68 ms** |
+
+2026-09-16 · Windows 10 · Intel i7-1165G7 · 31.7 GiB · Rust release · 2 warmups / 7 measurements.
+
+[Full results, raw observations and reproduction](benchmarks/README.md) — Synthetic local workloads; browser rendering is excluded. Other office products were not timed.
+<!-- BENCHMARK:END -->
+
+## Edition and file compatibility
+
+This repository provides the single-user local edition, without R2, cloud storage, collaborative editing or centralized accounts. Save active workbooks to files: in-memory state expires on server restart or after eight hours of session inactivity.
+
+Supported macro parts can be retained in XLSM, but VBA is not executed. CSV exports display values. See [feature coverage](docs/FEATURES.md) for editing and preservation of pivots, SmartArt, external connections and other advanced objects.
+
+## Documentation
+
+| Guide | What it covers |
 | --- | --- |
-| `server` | Rust local service and patched IronCalc integration |
-| `web` | Browser spreadsheet interface |
-| `vecmeta` | Included SVG/EMF conversion components |
-| `tools` | Math helpers, HTTP smoke tests and publication checks |
-| `benchmarks` | Generated workbooks, performance harness and measured results |
+| [Feature coverage](docs/FEATURES.md) | Editing, formats and advanced objects |
+| [U AI](docs/LOCAL_AI.md) | Model configuration and data handling |
+| [MCP](docs/MCP.md) | Local protocol and call examples |
+| [Fonts](FONT_LOADING.md) | Local fonts and rendering |
+| [Third-party notices](THIRD_PARTY_NOTICES.md) | Dependency origins and licenses |
+
+## Development
 
 ```sh
 cargo test --locked --manifest-path server/Cargo.toml
 python -m unittest discover -s tools -p "test_*.py"
-python tools/check_public_boundary.py
+python benchmarks/verify_results.py
 ```
 
-With the service running, execute `python tools/local_smoke.py --url http://127.0.0.1:8143`. The browser self-test entry is `/?test=auto`. The publication check reads indexed files. [Commercial licensing](docs/COMMERCIAL_LICENSE.md) · [License scope](docs/LICENSING.md).
+With the server running, use `python tools/local_smoke.py --url http://127.0.0.1:8143` to check the local API.
 
-## OmniDoc ecosystem
+## OmniDoc and community
 
-| Project | Purpose | Website / source |
-| --- | --- | --- |
-| OmniDoc | Main product portal | [omnidoc.top](https://omnidoc.top/) |
-| UniDoc | Document authoring | [app.unidoc.top](https://app.unidoc.top/) |
-| UniPPT | Presentations | [Editor](https://unippt.unidoc.top/) · [Source](https://github.com/OmniDocX/UniPPT) |
-| UniCell | Spreadsheets | [Editor](https://unicell.unidoc.top/) · [Source](https://github.com/OmniDocX/unicell) |
-| UniMail | Email, calendar and contacts | [unimail.omnidoc.top](https://unimail.omnidoc.top/) |
-| UniPic | Image and vector editing | [pic.unidoc.top](https://pic.unidoc.top/) |
-| vecmeta | SVG ↔ EMF conversion | [Source](https://github.com/OmniDocX/vecmeta) |
-| Source collections | Pinned copies of the three published components | [omnidoc](https://github.com/OmniDocX/omnidoc) · [omnidocx](https://github.com/OmniDocX/omnidocx) |
+[OmniDoc website](https://omnidoc.top/) · [UniPPT](https://github.com/OmniDocX/UniPPT) · [UniCell](https://github.com/OmniDocX/unicell) · [vecmeta](https://github.com/OmniDocX/vecmeta)
 
-Hosted products may offer features beyond the public local editions. Their availability and terms are defined by each product.
+Share reproducible bugs and feature requests through [GitHub Issues](https://github.com/OmniDocX/unicell/issues). Contributions to features, format compatibility and documentation are welcome.
 
-## License and commercial use
+Microsoft 365 (Office 365) and WPS Office inform our office workflows; ONLYOFFICE and Univer are reference projects in the public office ecosystem. See [project positioning and capabilities](docs/COMPARISON.md).
 
-First-party code and documentation use the unmodified [PolyForm Noncommercial 1.0.0](LICENSE). Uses permitted by that license are free. Commercial uses outside its permitted purposes require a separate paid commercial license: contact us to apply, agree on fees and obtain written authorization before use. The standard license's institutional permissions remain fully applicable. This is a source-available license, not an OSI-approved open-source license. Third-party terms and valid earlier grants remain unchanged.
+## License and commercial licensing
 
-[License scope and permitted uses](docs/LICENSING.md) · [Commercial licensing and application](docs/COMMERCIAL_LICENSE.md).
+First-party code uses [PolyForm Noncommercial 1.0.0](LICENSE). Noncommercial and specified institutional uses are free under its terms. Commercial uses outside those permissions require a [paid commercial license](docs/COMMERCIAL_LICENSE.md) and written authorization.
 
-Commercial contact: [cc@omnidoc.top](mailto:cc@omnidoc.top) · WeChat: **13184071590**. Complete applications receive a response within 48 hours; submission or silence does not grant permission.
+**Commercial contact: [cc@omnidoc.top](mailto:cc@omnidoc.top) · WeChat: 13184071590**
+
+This is a source-available license, not an OSI-approved open-source license. Third-party terms and valid earlier grants remain independent. See [license scope](docs/LICENSING.md).

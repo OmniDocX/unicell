@@ -1,50 +1,41 @@
+<div align="center">
+
+<img src="web/unicell-logo.svg" width="72" height="72" alt="UniCell" />
+
 # UniCell
+
+**本机电子表格：从数据整理、公式计算到工作簿交付。**
 
 [English](README.md) | **简体中文**
 
-[OmniDoc](https://omnidoc.top/) · [GitHub](https://github.com/OmniDocX)
+[官网](https://omnidoc.top/) · [在线体验](https://unicell.unidoc.top/) · [快速开始](#快速开始) · [文档](#文档) · [测评](benchmarks/README.zh-CN.md)
 
-**采用 Rust 计算引擎与浏览器界面的本机电子表格应用。**
+[![CI](https://github.com/OmniDocX/unicell/actions/workflows/ci.yml/badge.svg)](https://github.com/OmniDocX/unicell/actions/workflows/ci.yml)
+[![License: PolyForm Noncommercial](https://img.shields.io/badge/license-PolyForm_Noncommercial-315EFB?style=flat-square)](LICENSE)
+[![GitHub issues](https://img.shields.io/github/issues/OmniDocX/unicell?style=flat-square)](https://github.com/OmniDocX/unicell/issues)
 
-UniCell 是 OmniDoc 自主研发的纯国产应用项目，提供本机电子表格编辑、公式计算与文档转换。实现中采用 IronCalc、KaTeX 等第三方开源组件，其来源与独立许可证见 [第三方声明](THIRD_PARTY_NOTICES.md)；国产应用项目定位不表示全部依赖均为国产。
+</div>
 
-## 项目定位
+UniCell 把熟悉的电子表格操作带到浏览器：导入 Excel 或 CSV，编辑多工作表，计算公式，设置样式，并将结果保存回本机文件。Rust 服务负责计算与文档处理，浏览器提供编辑、数据工具和打印界面。
 
-以 **Microsoft 365（Office 365）和 WPS Office** 为同类产品对标，致力于建设功能最完善、工程资料最完整的国产开放源码办公项目。该表述是发展目标；当前功能范围与证据见 [产品对照](docs/COMPARISON.zh-CN.md)。自有代码使用非商业源码许可，具体条件见下文。
+**OmniDoc 自主研发的纯国产应用项目（app project）**，计算引擎采用 IronCalc，公式排版采用 KaTeX；第三方组件独立署名。
 
-## 性能测评
+![UniCell spreadsheet editor](docs/images/editor.png)
 
-<!-- BENCHMARK:START -->
-有界 SUM 范围优化已同步至公开本机版。同一台机器、相同 1 万行 CSV（10 万单元格、2 万公式），导入并计算中位数从 **20.217 秒降至 0.661 秒，约快 30.6 倍**。每项预热 2 次、正式测量 7 次。
+<sub>公开本机版实际界面：演示数据、公式、数字格式和汇总计算。</sub>
 
-| 操作 | 规模（行） | 中位数 ms | P95 ms |
-| --- | ---: | ---: | ---: |
-| CSV 导入与计算 | 10,000 | 660.92 | 707.79 |
-| XLSX 导出 | 10,000 | 562.30 | 618.65 |
-| XLSX 导入与计算 | 10,000 | 1144.12 | 1248.97 |
-| 批量编辑与重算 | 10,000 | 120.68 | 135.50 |
+## 核心能力
 
-[完整报告、旧基线与早期约 55 倍实验](benchmarks/README.zh-CN.md) · [JSON](benchmarks/results/2026-09-16-sum-optimized-windows-x64.json)
-
-新版每轮全部 2 万个公式及结果均核验正确。 这是单机合成工作负载的前后观测，不是 Excel、Office 365 或 WPS 的速度对比，也不代表全部表格功能的整体提速。共享工作站的后台负载与温度未完全受控。XLSX 导出等未针对优化的路径可能变慢，所有结果均公开保留。公网服务部署状态不由本仓库更新改变。
-<!-- BENCHMARK:END -->
-
-## 功能范围
-
-| 领域 | 公开本机版 |
-| --- | --- |
-| 工作簿编辑 | 单元格、公式、富文本、数字格式、边框、合并、行列操作、多工作表、撤销与重做 |
-| 数据操作 | 排序、筛选、冻结窗格、条件格式、数据验证及支持的假设分析 |
-| 文档格式 | XLSX/XLSM、CSV、UniDoc UDOC 与 UniCell HTML 导入导出 |
-| 嵌入内容 | 图片、SVG、图表及支持的 Office 对象；保留部分复杂 OOXML 部件 |
-| 本机工作流 | 文件保存、最近文件、浏览器恢复副本、打印预览与分页 |
-| 自动化 | 可选自定义 U AI 与五个本机 MCP 工具 |
-
-公开版不包含 R2、云存储、共享链接、多人协作、统一账户和托管额度系统。
+- **完整的日常编辑** — 多工作表、单元格与区域操作、行列调整、合并、富文本、撤销和重做。
+- **公式与自动重算** — 基于 IronCalc 的公式引擎处理依赖计算；有界 SUM 已优化，随源码提供可复现测评。
+- **数据整理** — 排序、筛选、冻结窗格、条件格式、数据验证与受支持的假设分析操作。
+- **文件往返** — 支持 XLSX/XLSM、CSV、UDOC 和 UniCell HTML 导入导出，便于继续编辑与本机归档。
+- **可视化与打印** — 处理图片、SVG、图表及受支持的 Office 对象，提供页面设置和浏览器打印。
+- **AI 自动化** — 配置 U AI 辅助工作簿操作，或通过本机 MCP 读取数据、写入公式和设置格式。
 
 ## 快速开始
 
-安装支持 edition 2024 的 Rust 稳定工具链与现代浏览器。Windows 构建需 Visual Studio C++ 构建工具；Linux 构建需 C/C++ 工具链、pkg-config 与 OpenSSL 开发包。首次下载依赖需要网络。
+安装 Git、支持 edition 2024 的 Rust 稳定工具链和现代浏览器：
 
 ```sh
 git clone https://github.com/OmniDocX/unicell.git
@@ -52,61 +43,76 @@ cd unicell
 cargo run --release --locked --manifest-path server/Cargo.toml
 ```
 
-访问 **http://127.0.0.1:8143**。在命令末尾追加 `-- --port=8145` 可修改端口。请在仓库根目录或 `server/` 中运行。程序名为 `opencell-server`；所需的 `vecmeta/` 源码已随仓库提供。
+访问 **http://127.0.0.1:8143**。修改端口可在命令后追加 `-- --port=8145`；请从仓库根目录或 `server/` 目录运行。
 
-## 数据生命周期与兼容性
+Windows 需 Visual Studio C++ 构建工具；Linux 需 C/C++ 工具链、pkg-config 和 OpenSSL 开发包。
 
-服务绑定 `127.0.0.1`，通过浏览器会话隔离工作簿。活动工作簿主要存放在服务内存中，服务重启或会话闲置八小时后，该状态会失效。应主动保存正式文件，浏览器恢复副本仅作为补充。
+## AI 与开发接入
 
-CSV 导出当前工作表显示值，不保留工作簿公式结构和格式。XLSM 宏部件可按支持范围保留，但不执行 VBA。透视表、外部连接、SmartArt 等高级对象存在保留和编辑边界，见 [功能与限制](docs/FEATURES.md)。
+**U AI**：复制 `.env.example` 为 `.env.local`，配置兼容 Chat Completions 的模型服务。基础编辑无需模型；启用 AI 后，所选上下文会发送至配置的服务。[配置说明](docs/LOCAL_AI.md)。
 
-## 可选接入
+**MCP**：本机 `/mcp` 提供以下五个工具，使用当前 Cookie 工作簿会话：[协议与接入示例](docs/MCP.md)。
 
-| 接入项 | 配置 |
+| 工具 | 用途 |
 | --- | --- |
-| U AI | 复制 `.env.example` 为 `.env.local`，配置兼容 Chat Completions 的服务。所选上下文会发送至该服务，见 [本机 AI](docs/LOCAL_AI.md)。 |
-| Office 数学公式 | 执行 `python -m pip install -r tools/requirements-math.txt`；以 `UNICELL_PYTHON` 指定解释器。普通单元格公式无需 Python。 |
-| HTML 对象截图 | 安装 Chrome、Edge 或 Chromium，可通过 `UNICELL_CHROMIUM` 指定路径。 |
-| 字体 | 默认使用系统字体，可加载具备使用权的本机字体，见 [字体加载](FONT_LOADING.md)。 |
-| MCP | `/mcp` 接受本机 HTTP POST，使用 Cookie 工作簿会话，提供信息查询、单元格/区域读取、单元格写入与区域格式设置，见 [MCP 接入](docs/MCP.md)。 |
+| `workbook_info` | 查看工作簿与工作表 |
+| `read_cell` / `read_range` | 读取单元格与范围 |
+| `write_cell` | 写入数值、文本和公式 |
+| `format_range` | 设置区域格式 |
 
-## 架构与验证
+## 性能
 
-| 目录 | 职责 |
+<!-- BENCHMARK:START -->
+有界 SUM 优化后，1 万行 CSV 导入与计算中位数从 **20.217 秒降至 0.661 秒，约快 31 倍**。每轮全部 2 万个公式及结果均核验正确。
+
+| 操作 | 工作负载 | 中位数 |
+| --- | --- | --- |
+| CSV 导入与计算 | 10,000 行 / 20,000 公式 | **660.92 ms** |
+| 批量编辑与重算 | 10,000 行 / 20,000 公式 | **120.68 ms** |
+
+2026-09-16 · Windows 10 · Intel i7-1165G7 · 31.7 GiB · Rust release · 预热 2 次 / 测量 7 次。
+
+[完整测评、原始数据与复现方法](benchmarks/README.zh-CN.md) — 以上为合成工作负载的本机测试，不含浏览器渲染，未与其他办公软件做速度对测。
+<!-- BENCHMARK:END -->
+
+## 版本与文件兼容性
+
+本仓库提供单人本机版，不含 R2、云存储、共享编辑或统一账户。活动工作簿存放在服务内存中，需主动保存；服务重启或会话闲置八小时后，活动状态会失效。
+
+XLSM 可保留受支持的宏部件，但不执行 VBA；CSV 导出显示值。透视表、SmartArt、外部连接等高级对象的编辑与保留范围见[功能说明](docs/FEATURES.md)。
+
+## 文档
+
+| 入口 | 内容 |
 | --- | --- |
-| `server` | Rust 本机服务与 IronCalc 补丁集成 |
-| `web` | 浏览器电子表格界面 |
-| `vecmeta` | 随附 SVG/EMF 转换组件 |
-| `tools` | 公式辅助程序、HTTP 冒烟测试与发布检查 |
-| `benchmarks` | 生成式工作簿、测评脚本与实测记录 |
+| [功能说明](docs/FEATURES.md) | 编辑、文件格式与高级对象 |
+| [U AI](docs/LOCAL_AI.md) | 模型配置与数据处理 |
+| [MCP](docs/MCP.md) | 本机协议与调用示例 |
+| [字体加载](FONT_LOADING.md) | 本机字体与显示 |
+| [第三方声明](THIRD_PARTY_NOTICES.md) | 依赖来源与许可证 |
+
+## 参与开发
 
 ```sh
 cargo test --locked --manifest-path server/Cargo.toml
 python -m unittest discover -s tools -p "test_*.py"
-python tools/check_public_boundary.py
+python benchmarks/verify_results.py
 ```
 
-运行服务后，执行 `python tools/local_smoke.py --url http://127.0.0.1:8143`。浏览器自测入口为 `/?test=auto`。发布检查读取 Git 暂存区。[商业授权](docs/COMMERCIAL_LICENSE.md) · [许可范围](docs/LICENSING.md)。
+服务运行后，可执行 `python tools/local_smoke.py --url http://127.0.0.1:8143` 检查本机 API。
 
-## OmniDoc 产品体系
+## OmniDoc 产品与社区
 
-| 项目 | 方向 | 官网 / 源码 |
-| --- | --- | --- |
-| OmniDoc | 产品主站 | [omnidoc.top](https://omnidoc.top/) |
-| UniDoc | 文档创作 | [app.unidoc.top](https://app.unidoc.top/) |
-| UniPPT | 演示文稿 | [编辑器](https://unippt.unidoc.top/) · [源码](https://github.com/OmniDocX/UniPPT) |
-| UniCell | 电子表格 | [编辑器](https://unicell.unidoc.top/) · [源码](https://github.com/OmniDocX/unicell) |
-| UniMail | 邮件、日历与联系人 | [unimail.omnidoc.top](https://unimail.omnidoc.top/) |
-| UniPic | 图像与矢量编辑 | [pic.unidoc.top](https://pic.unidoc.top/) |
-| vecmeta | SVG ↔ EMF 转换 | [源码](https://github.com/OmniDocX/vecmeta) |
-| 源码合集 | 三个已公开组件的固定版本副本 | [omnidoc](https://github.com/OmniDocX/omnidoc) · [omnidocx](https://github.com/OmniDocX/omnidocx) |
+[OmniDoc 主站](https://omnidoc.top/) · [UniPPT](https://github.com/OmniDocX/UniPPT) · [UniCell](https://github.com/OmniDocX/unicell) · [vecmeta](https://github.com/OmniDocX/vecmeta)
 
-在线产品可能提供超出公开本机版范围的功能，其可用性与条款以各产品说明为准。
+问题与建议请提交 [GitHub Issue](https://github.com/OmniDocX/unicell/issues)，附上复现步骤和可公开的最小示例。欢迎参与功能开发、兼容性改进和文档建设。
 
-## 许可证与商业授权
+办公体验对标 Microsoft 365（Office 365）与 WPS Office；公开办公项目参照 ONLYOFFICE、Univer。[项目定位与能力对照](docs/COMPARISON.zh-CN.md)。
 
-自有代码及文档采用未经修改的标准 [PolyForm Noncommercial 1.0.0](LICENSE)。符合该许可允许用途的使用免费。超出其允许范围的商业用途须另行申请付费商业授权：使用前请联系我们，协商费用并取得书面许可。标准许可对特定机构的允许条款完整保留。本许可属于源码可见许可，不是 OSI 批准的开源许可。第三方条款及旧版本已合法授予的权利保持不变。
+## 许可证与商业合作
 
-[许可范围与允许用途](docs/LICENSING.md) · [商业授权与申请流程](docs/COMMERCIAL_LICENSE.md)。
+自有代码采用 [PolyForm Noncommercial 1.0.0](LICENSE)。标准许可允许的非商业及特定机构用途免费；超出允许范围的商业用途，须[申请付费商业授权](docs/COMMERCIAL_LICENSE.md)并取得书面许可。
 
-商业联系：[cc@omnidoc.top](mailto:cc@omnidoc.top) · 微信：**13184071590**。完整申请材料收到后 48 小时内答复；提交申请或未获回复均不构成授权。
+**商业联系：[cc@omnidoc.top](mailto:cc@omnidoc.top) · 微信：13184071590**
+
+本项目采用源码可见许可（非 OSI 开源许可）。第三方组件及旧版本有效授权保持独立，详见[许可范围](docs/LICENSING.md)。
