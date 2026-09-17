@@ -34,13 +34,13 @@ All 20,000 formulas and results passed validation on every new iteration. This i
 | Area | Public local edition |
 | --- | --- |
 | Workbook editing | Cells, formulas, rich text, number formats, borders, merges, rows/columns, multiple sheets, undo/redo |
-| Data operations | Sorting, filtering, frozen panes, conditional formatting, validation and supported what-if analysis |
+| Data operations | Sorting, filtering, freeze panes, conditional formatting, data validation and supported what-if analysis |
 | Document formats | XLSX/XLSM, CSV, UniDoc UDOC and UniCell HTML import/export |
 | Embedded content | Images, SVG, charts and supported Office objects; preservation of selected complex OOXML parts |
 | Local workflows | File saving, recent files, browser recovery copies, print preview and pagination |
 | Automation | Optional configurable U AI and five local MCP tools |
 
-The public edition excludes R2, cloud storage, shared links, collaborative editing, centralized accounts and hosted quotas.
+The public local edition excludes R2, cloud storage, shared links, collaborative editing, centralized accounts and hosted quotas.
 
 ## Quick start
 
@@ -58,7 +58,7 @@ Open **http://127.0.0.1:8143**. Append `-- --port=8145` to select a different po
 
 The service binds to `127.0.0.1` and separates workbooks by browser session. Active workbooks are primarily held in server memory. Restarting the server or leaving a session idle for eight hours invalidates that state. Save working documents explicitly; browser recovery copies are supplementary.
 
-CSV exports display values from the current sheet, without retaining workbook formulas or formatting. XLSM macro parts may be retained, but VBA is not executed. Pivots, external connections, SmartArt and other advanced objects have preservation/editing limits. See [features and limitations](docs/FEATURES.md).
+CSV exports display values from the current sheet, without retaining workbook formulas or formatting. XLSM macro parts may be retained, but VBA is not executed. PivotTables, external data connections, SmartArt and other advanced objects have preservation/editing limits. See [features and limitations](docs/FEATURES.md).
 
 ## Optional integrations
 

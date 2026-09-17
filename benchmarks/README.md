@@ -26,7 +26,6 @@ Previously, each `SUM(Arow:Hrow)` scanned the worksheet to determine its used ra
 | Harness SHA-256 | `769a6efb2d6b90b95dd5d04dda8a9aba46fec4ae2e80226f1d4add9e185b78e8` |
 | UTC | 2026-09-15T23:32:43.714362+00:00 |
 
-
 ## Workload and correctness
 
 One worksheet with ten columns: eight numeric inputs, `SUM(A:H)`, and a dependent multiplication. CSV/XLSX imports include automatic calculation; a batch edit updates column A in every row and includes recalculation and history. Every new warmup and measured iteration validates XLSX ZIP integrity, all cell/formula counts, and every formula expression and cached numeric value: all **20,000 formulas** at 10,000 rows. Validation exports, parsing and assertions after import/edit occur outside timing. The historical baseline sampled values in first/middle/last rows; validation is now stronger, and inter-iteration exports can change cache and load conditions.
@@ -90,4 +89,5 @@ cargo test --locked --manifest-path server/vendor/ironcalc_base/Cargo.toml --lib
 cargo test --locked --manifest-path server/vendor/ironcalc_base/Cargo.toml --lib test_fn_3d_references::
 python benchmarks/verify_results.py
 ```
+
 Append `.exe` on Windows. The standard-library-only harness starts and stops its own loopback service.
