@@ -45,7 +45,7 @@ cd unicell
 cargo run --release --locked --manifest-path server/Cargo.toml
 ```
 
-访问 **http://127.0.0.1:8143**。修改端口可在命令后追加 `-- --port=8145`；请从仓库根目录或 `server/` 目录运行。
+访问 [**http://127.0.0.1:8143**](http://127.0.0.1:8143)。修改端口可在命令后追加 `-- --port=8145`；请从仓库根目录或 `server/` 目录运行。
 
 Windows 需 Visual Studio C++ 构建工具；Linux 需 C/C++ 工具链、pkg-config 和 OpenSSL 开发包。
 
