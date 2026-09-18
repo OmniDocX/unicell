@@ -4455,8 +4455,8 @@ async function exportAs(fmt) {
   const ext = fmt === 'xlsx' ? '.' + (S.excelExtension || 'xlsx') : `.${fmt}`;
   const q = '?name=' + encodeURIComponent(base);
   setStatus('正在导出…');
-  // XLSX 路径在 createWorkbookBlob 内部 throw（HTTP/网络错误），fetch 也可能直接 reject；
-  // 不捕获的话异常冒泡出 onclick，状态栏会永远停在“正在导出…”。
+  // 导出中的异步错误（XLSX 在 createWorkbookBlob 内部 throw，CSV/HTML/udoc 的
+  // fetch/blob 也可能 reject）若不捕获，会冒泡出 onclick，状态栏永远停在“正在导出…”。
   try {
     let resp;
     let blob;
