@@ -2504,6 +2504,46 @@ async function runSelfTest() {
     ok('T96 字体：SHA-256/MD5 清单、本地优先边界、同源内容寻址回退', fontContract96,
       `md5=${emptyMd596} files=${fontManifest96?.files?.length} faces=${fontManifest96?.faces?.length} headers=${fontHeaders96}`);
     aiHooks86?.close();
+    // T97 导出失败必须反馈用户：stub fetch+alert 驱动真实 exportAs 异步流程，
+    // 状态栏要落到「导出失败」、弹出失败提示，绝不能停留在「正在导出…」，
+    // 且流程内不产生 unhandledrejection；stub 全部在 finally 恢复，不污染后续用例。
+    let threw97 = null;
+    let status97 = '';
+    const alerts97 = [];
+    const rejections97 = [];
+    const realFetch97 = window.fetch;
+    const realAlert97 = window.alert;
+    const onReject97 = (e) => rejections97.push(String((e.reason && e.reason.message) || e.reason));
+    try {
+      window.addEventListener('unhandledrejection', onReject97);
+      window.alert = (msg) => alerts97.push(String(msg));
+      window.fetch = (input, init) => {
+        const url97 = String(typeof input === 'string' ? input : (input && input.url) || '');
+        // 只拦截 XLSX 导出（'/api/export' 或带 query），不能误伤 /api/export-csv 等其他端点
+        if (url97 === '/api/export' || url97.startsWith('/api/export?')) {
+          return Promise.resolve(new Response(JSON.stringify({ ok: false, error: 'injected T97' }),
+            { status: 500, headers: { 'Content-Type': 'application/json' } }));
+        }
+        return realFetch97(input, init);
+      };
+      // 旧实现会在这里 reject（未处理异常冒泡）；修复后内部消化并正常 resolve。
+      // 显式接住 rejection，保证 RED 时套件仍能跑完并给出 T97 的具体断言细节。
+      try { await exportAs('xlsx'); } catch (e) { threw97 = (e && e.message) || String(e); }
+      status97 = document.getElementById('status-msg')?.textContent || '';
+    } finally {
+      window.fetch = realFetch97;
+      window.alert = realAlert97;
+      window.removeEventListener('unhandledrejection', onReject97);
+    }
+    // 故障只存在于 stub 期间：恢复真实网络后立即再导出，验证 catch 不残留状态污染。
+    // 必须在 finally 恢复之后执行，否则旧实现上这次调用会再次撞上注入的 500。
+    await exportAs('xlsx');
+    const recovered97 = (document.getElementById('status-msg')?.textContent || '').startsWith('已导出');
+    ok('T97 导出失败反馈：状态落「导出失败」+alert，不卡「正在导出…」，恢复后可再导出',
+      threw97 === null && status97 === '导出失败'
+      && alerts97.length === 1 && alerts97[0].includes('导出失败')
+      && rejections97.length === 0 && recovered97,
+      `status=${status97} alerts=${JSON.stringify(alerts97)} rejections=${JSON.stringify(rejections97)} threw=${threw97} recovered=${recovered97}`);
   } catch (e) {
     out.push('FAIL exception :: ' + (e && e.message));
   }

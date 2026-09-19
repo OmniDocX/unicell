@@ -4455,24 +4455,31 @@ async function exportAs(fmt) {
   const ext = fmt === 'xlsx' ? '.' + (S.excelExtension || 'xlsx') : `.${fmt}`;
   const q = '?name=' + encodeURIComponent(base);
   setStatus('正在导出…');
-  let resp;
-  let blob;
-  if (fmt === 'xlsx') {
-    blob = await createWorkbookBlob();
-  } else {
-    const sheetQuery = fmt === 'csv' ? `&sheet=${encodeURIComponent(S.sheet)}` : '';
-    resp = await fetch(`/api/export-${fmt}${q}${sheetQuery}`);
+  // 导出中的异步错误（XLSX 在 createWorkbookBlob 内部 throw，CSV/HTML/udoc 的
+  // fetch/blob 也可能 reject）若不捕获，会冒泡出 onclick，状态栏永远停在“正在导出…”。
+  try {
+    let resp;
+    let blob;
+    if (fmt === 'xlsx') {
+      blob = await createWorkbookBlob();
+    } else {
+      const sheetQuery = fmt === 'csv' ? `&sheet=${encodeURIComponent(S.sheet)}` : '';
+      resp = await fetch(`/api/export-${fmt}${q}${sheetQuery}`);
+    }
+    if (resp && !resp.ok) { setStatus('导出失败'); alert('导出失败：' + resp.status); return; }
+    if (!blob) blob = await resp.blob();
+    // 原生下载流：创建 a[download] 触发浏览器下载（最可靠，与“打开”的原生文件流对称）
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = base + ext;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1500);
+    const label = fmt === 'xlsx' ? 'Excel' : fmt === 'html' ? '无损 HTML' : fmt === 'csv' ? 'CSV 当前工作表' : 'udoc';
+    setStatus(`已导出 ${label}：${base}${ext}`);
+  } catch (err) {
+    setStatus('导出失败');
+    alert(err?.message || err);
   }
-  if (resp && !resp.ok) { setStatus('导出失败'); alert('导出失败：' + resp.status); return; }
-  if (!blob) blob = await resp.blob();
-  // 原生下载流：创建 a[download] 触发浏览器下载（最可靠，与“打开”的原生文件流对称）
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = base + ext;
-  document.body.appendChild(a); a.click(); a.remove();
-  setTimeout(() => URL.revokeObjectURL(url), 1500);
-  const label = fmt === 'xlsx' ? 'Excel' : fmt === 'html' ? '无损 HTML' : fmt === 'csv' ? 'CSV 当前工作表' : 'udoc';
-  setStatus(`已导出 ${label}：${base}${ext}`);
 }
 // 当前工作表的完整实际区域由 Rust 端按真实行高/列宽重建。必须在专用 iframe
 // 的 Window 上调用 print()；若在应用主 Window 上调用，Chromium 会把 Ribbon、公式栏、
